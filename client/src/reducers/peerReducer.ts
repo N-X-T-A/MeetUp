@@ -8,7 +8,9 @@ import {
 
 export type PeerState = Record<
     string,
-    { stream?: MediaStream; userName?: string; peerId: string }
+    { stream?: MediaStream; 
+      userName?: string; 
+      peerId: string;}
 >;
 type PeerAction =
     | {

@@ -17,8 +17,9 @@ async function getExternalIP(): Promise<string | null> {
 // Hàm cập nhật WS với địa chỉ external
 async function updateWSWithExternalIP() {
   const externalIP = await getExternalIP();
+  console.log(externalIP);
   if (externalIP) {
-    WS = `https://${externalIP}:9898`;
+    WS = `https://${externalIP}:5000`;
     console.log("WS updated with external IP:", WS);
   } else {
     console.error("Unable to fetch external IP, WS remains unchanged.");

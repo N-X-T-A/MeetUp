@@ -1,0 +1,10 @@
+.col {
+  color: white;
+  flex: 1 0 0%;
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2px;
+  align-content: center;
+}
