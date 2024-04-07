@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "../css/pages/test.css";
 import { VideoPlayer } from "../components/VideoPlayer";
 import { useContext } from "react";
 import { RoomContext } from "../context/RoomContext";
@@ -14,28 +13,38 @@ interface AutoLayoutExampleProps {
 function AutoLayoutExample({ numberOfItems }: AutoLayoutExampleProps) {
   const { stream } = useContext(RoomContext);
 
-  const maxRows = 3;
-  const maxCol = numberOfItems > 12 ? 11 : numberOfItems;
-  const numberOfRows = Math.min(Math.ceil(maxCol / 4), maxRows);
+  const maxCols = 3; // Số cột tối đa trong mỗi hàng
+  const maxItemsPerGrid = 9; // Số ô tối đa mà chúng ta muốn hiển thị mỗi lần
 
-  const totalCells = numberOfRows * 4;
+  // Tính toán số hàng và số cột dựa trên số lượng items
+  let numRows = Math.ceil(numberOfItems / maxCols);
+  let numCols = Math.min(numberOfItems, maxCols);
 
-  const itemsToShow = numberOfItems > totalCells ? totalCells : numberOfItems;
+  // Nếu số lượng items vượt quá số lượng ô tối đa, thì chúng ta sẽ hiển thị
+  // tối đa số lượng ô tối đa, và tính toán lại số hàng và số cột.
+  if (numberOfItems > maxItemsPerGrid) {
+    numRows = Math.ceil(maxItemsPerGrid / maxCols);
+    numCols = maxCols;
+  }
 
+  // Tạo các hàng và cột cho grid
   const rows: JSX.Element[] = [];
-  for (let i = 0; i < numberOfRows; i++) {
+  for (let i = 0; i < numRows; i++) {
     const cols: JSX.Element[] = [];
-    for (let j = 0; j < 4; j++) {
-      const index = i * 4 + j;
-      if (index === 11 && numberOfItems > 12) {
+    for (let j = 0; j < numCols; j++) {
+      const index = i * maxCols + j;
+      // Hiển thị số lượng còn lại khi số lượng vượt quá maxItemsPerGrid
+      if (index === maxItemsPerGrid - 1 && numberOfItems > maxItemsPerGrid) {
         cols.push(
           <Col key={index} style={{ backgroundColor: "black", color: "white" }}>
-            +{numberOfItems - 11}
+            +{numberOfItems - maxItemsPerGrid + 1}
           </Col>
         );
-      } else if (index < itemsToShow) {
+      } else if (index < numberOfItems) {
+        // Hiển thị video player nếu vị trí index cần hiển thị
         cols.push(<Col key={index}>{<VideoPlayer stream={stream} />}</Col>);
       } else {
+        // Hiển thị ô trống nếu không đủ items
         cols.push(<Col key={index}></Col>);
       }
     }
@@ -46,7 +55,7 @@ function AutoLayoutExample({ numberOfItems }: AutoLayoutExampleProps) {
 }
 
 export function Test() {
-  const [numberOfItems, setNumberOfItems] = useState(12);
+  const [numberOfItems, setNumberOfItems] = useState(9);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(event.target.value);

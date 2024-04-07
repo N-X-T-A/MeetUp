@@ -100,7 +100,6 @@ export const Room = () => {
             {screenSharingId !== userId && (
               <div>
                 <VideoPlayer stream={stream} />
-                <NameInput />
               </div>
             )}
 
