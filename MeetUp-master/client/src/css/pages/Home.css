@@ -1,0 +1,198 @@
+* {
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: "Roboto", sans-serif;
+  }
+  .nav {
+    font-family: "Nunito", sans-serif;
+    width: 100%;
+    height: 48px;
+    display: grid;
+    grid-template-columns: 65% 35% ;
+    margin-top: 10px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+  }
+  .text-5xl {
+    font-size: 1rem;
+    line-height: 0;
+}
+  .time-date {
+    position: absolute;
+    right: 30px;
+    
+  }
+  #time {
+    font-size: 14pt;
+  }
+  #Date {
+    font-size: 14pt;
+    margin-left: 8px;
+  }
+  .nav {
+    color: #5f6368 !important;
+  }
+  .nav {
+    cursor: pointer;
+  }
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .text-style {
+    font-weight: 400;
+    padding: 0.5rem;
+    font-size: 50pt;
+  }
+  .text-area {
+    margin-top: 100px;
+    margin-left: 45px;
+  }
+  .h4 {
+    font-weight: 400;
+    font-size: 15pt;
+    margin-left: 10px;
+    color: #5f6368;
+  }
+  .input-code {
+    outline: none;
+    height: 45px;
+    width: 260px;
+    margin-left: -15px;
+    padding-left: 45px;
+    margin-top: 35px;
+    border-radius:3px;
+    border:1.5px solid #5f6368;
+    padding-right:15px;
+    font-family: "Roboto", sans-serif;
+  }
+  .key {
+    position: relative;
+    left: 25px;
+    top: 7px;
+    color:#5f6368;
+  }
+  .input-code:focus-within{
+    border:1.5px solid blue;
+  }
+  .input-code:focus-within + .button{
+  display:inline-block;
+  }
+  .button{
+    width:50px;
+    height:45px;
+    font-weight:700;
+    border:none;
+    background-color:transparent;
+    color:#5f6368;
+    display:none;
+  }
+  .main-slider {
+    width: 70%;
+    height: 100%;
+    display: block;
+    margin: auto;
+  }
+  .account-text
+  {
+    color: rebeccapurple;
+  }
+  .previous-slide {
+    height: 40px;
+    background-color: whitesmoke;
+    width: 40px;
+    border-radius: 150px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: 50%;
+    left: 10px;
+    box-shadow: rgb(0 0 0 / 10%) 0px 5px 15px;
+  }
+  .next-slide {
+    height: 40px;
+    background-color: whitesmoke;
+    width: 40px;
+    border-radius: 150px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: 50%;
+    float: right;
+    right: 10px;
+    box-shadow: rgb(0 0 0 / 10%) 0px 5px 15px;
+  }
+  .btns:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+  .slide-view {
+    height: 100%;
+    width: 70%;
+    margin: auto;
+    background-image: url("https://www.gstatic.com/meet/user_edu_brady_bunch_light_81fa864771e5c1dd6c75abe020c61345.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  * {
+    margin: 0px;
+    padding: 0px;
+  }
+  span {
+    cursor: pointer;
+  }
+  span::selection {
+    background: none;
+  }
+  .disable {
+    z-index: -1000;
+    color: #bdb0b0 !important;
+  }
+  body {
+    font-family: "Roboto", sans-serif;
+  }
+  .slide-capions {
+    text-align: center;
+  }
+  .hed-cap {
+    font-size: 1.5rem;
+  }
+  .sub-cap {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  .pointer span {
+    font-size: 7pt;
+    text-align: center;
+    margin: auto;
+  }
+  .pointer {
+    margin: auto;
+    text-align: center;
+  }
+  .slide-remaing {
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+  }
+  .current {
+    color: #1a73e8;
+  }
+  .nextone {
+    color: #d1c7c7;
+  }
+  .text-render{
+    margin-left:10px;
+    margin-top:40px;
+  }
+  a{
+    text-decoration:none;
+   
+  }
