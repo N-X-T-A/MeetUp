@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleHalfStroke } from "@fortawesome/free-solid-svg-icons";
 import "../css/pages/login.css";
 import { UserContext } from "../context/UserContext";
+import { F_Login } from "../components/Alert/F_Login";
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export const Login: React.FC = () => {
   const { userName, setUserName } = useContext(UserContext);
 
   const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false); // State để lưu trạng thái hiển thị mật khẩu
   const externalIP = useExternalIP();
 
   const storedURL: string | null = localStorage.getItem("currentURL");
@@ -49,18 +51,27 @@ export const Login: React.FC = () => {
     const register = () => {
       navigate("/register");
     };
+
     return (
       <div>
         <div className="background1"></div>
         <div className="bg">
           <div className="content">
-            <h2 className="logo">
-              <FontAwesomeIcon icon={faCircleHalfStroke} /> MeetUp
-            </h2>
+            <div className="logo">
+              <h1 className="relative flex items-center text-5xl font-bold text-black-800 dark:text-black dark:opacity-90 transition-colors">
+                Meet
+                <span className="ml-1 rounded-xl bg-current p-2 text-[0.7em] leading-none">
+                  <span className="text-white dark:text-black">UP</span>
+                </span>
+              </h1>
+            </div>
             <div className="text-sci">
               <h2>
-                Welcome!! <br />
-                <span>To our new Website</span>
+                Chào Mừng Bạn Đã Đến Với MeetUp <br />
+                <span>
+                  Nơi Mọi Cuộc Gặp Gỡ Trở Nên Dễ Dàng Và Linh Hoạt Hơn Bao Giờ
+                  Hết
+                </span>
               </h2>
               <p></p>
             </div>
@@ -68,7 +79,7 @@ export const Login: React.FC = () => {
           <div className="logreg-box">
             <div className="form-box login">
               <form onSubmit={handleLogin}>
-                <h2>Login</h2>
+                <h2>Đăng Nhập</h2>
                 <div className="imput-box">
                   <input
                     name="option"
@@ -81,21 +92,29 @@ export const Login: React.FC = () => {
                   />
                   <input
                     name="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     id="form3Example4c"
                     className="form-control"
                     placeholder="Mật Khẩu"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="show-password"
+                  >
+                    {showPassword ? "Ẩn Mật Khẩu" : "Hiển Thị Mật Khẩu"}
+                  </button>
+
                   <button type="submit" className="buton">
                     Đăng Nhập
                   </button>
                 </div>
                 <div className="login-register">
                   <p>
-                    Don't have an account?{" "}
-                    <span onClick={register}>Sign up</span>
+                    Bạn Chưa Có Tài Khoản{" "}
+                    <span onClick={register}>Đăng Ký Ngay</span>
                   </p>
                 </div>
               </form>

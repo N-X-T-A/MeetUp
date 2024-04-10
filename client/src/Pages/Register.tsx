@@ -2,13 +2,16 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useExternalIP } from "../common/ExternalIP";
 import { UserContext } from "../context/UserContext";
+import { Login } from "./Login";
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState<string>("");
   const { userName } = useContext(UserContext);
-  const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
+
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false); // State để lưu trạng thái hiển thị mật khẩu
   const externalIP = useExternalIP();
 
   if (!!userName) {
@@ -33,37 +36,77 @@ export const Register: React.FC = () => {
         console.error("Error:", error);
       }
     };
+    const login = () => {
+      navigate("/login");
+    };
 
     return (
       <div>
-        <h2>Đăng ký</h2>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <div>
-            <label>Tên đăng nhập:</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
+        <div className="background1"></div>
+        <div className="bg">
+          <div className="content">
+            <h2 className="logo">MeetUp</h2>
+            <div className="text-sci">
+              <h2>
+                Đăng Ký Tài Khoản Để Có Thể Tham Gia Cuộc Họp <br />
+                <span>Thuận Tiện Nhanh Chóng Tiện Lợi</span>
+              </h2>
+              <p></p>
+            </div>
           </div>
-          <div>
-            <label>Mật khẩu:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <div className="logreg-box">
+            <div className="form-box login">
+              <form onSubmit={handleRegister}>
+                <h2>Đăng Ký</h2>
+                <div className="imput-box">
+                  <input
+                    name="yourname"
+                    type="text"
+                    className="form-control"
+                    placeholder="Họ Và Tên"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+
+                  <input
+                    name="option"
+                    type="text"
+                    className="form-control"
+                    placeholder="Tên Đăng Nhập "
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                  <input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    id="form3Example4c"
+                    className="form-control"
+                    placeholder="Mật Khẩu"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="show-password"
+                  >
+                    {showPassword ? "Ẩn Mật Khẩu" : "Hiển Thị Mật Khẩu"}
+                  </button>
+
+                  <button type="submit" className="buton">
+                    Đăng Ký
+                  </button>
+                </div>
+                <div className="login-register">
+                  <p>
+                    Bạn Đã Có Tài Khoản{" "}
+                    <span onClick={login}>Đăng Nhập Ngay</span>
+                  </p>
+                </div>
+              </form>
+            </div>
           </div>
-          <div>
-            <label>Họ tên:</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <button onClick={handleRegister}>Đăng ký</button>
-        </form>
+        </div>
       </div>
     );
   }
