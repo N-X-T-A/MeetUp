@@ -5,6 +5,13 @@ import Col from "react-bootstrap/Col";
 import { VideoPlayer } from "../components/VideoPlayer";
 import { useContext } from "react";
 import { RoomContext } from "../context/RoomContext";
+import { CameraButton } from "../components/CameraButton";
+import { MicButton } from "../components/MicButton";
+import { ShareScreenButton } from "../components/ShareScreeenButton";
+import { ChatButton } from "../components/ChatButton";
+import { CancelButton } from "../components/CancelButton";
+import { ChatContext } from "../context/ChatContext";
+import { Chat } from "../components/chat/Chat"; // Import the Chat component
 
 interface AutoLayoutExampleProps {
   numberOfItems: number;
@@ -51,11 +58,25 @@ function AutoLayoutExample({ numberOfItems }: AutoLayoutExampleProps) {
     rows.push(<Row key={i}>{cols}</Row>);
   }
 
-  return <Container>{rows}</Container>;
+  return <Container style={{ width: "60%" }}>{rows}</Container>;
 }
 
 export function Test() {
   const [numberOfItems, setNumberOfItems] = useState(9);
+  const {
+    stream,
+    screenStream,
+    peers,
+    shareScreen,
+    screenSharingId,
+    setRoomId,
+    isCameraOn,
+    toggleCamera,
+    isMicOn,
+    toggleMicro,
+    CancelCall,
+  } = useContext(RoomContext);
+  const { toggleChat, chat } = useContext(ChatContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(event.target.value);
@@ -73,7 +94,22 @@ export function Test() {
         min="1"
       />
       <AutoLayoutExample numberOfItems={numberOfItems} />
-      <div></div>
+      <div>
+        {chat.isChatOpen && (
+          <div className="border-l-2 pb-28">
+            <Chat />
+          </div>
+        )}
+      </div>
+      <div>
+        <div className="h-28 fixed bottom-0 p-6 w-full flex items-center justify-center border-t-2 bg-white">
+          <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn} />
+          <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
+          <ShareScreenButton onClick={shareScreen} />
+          <ChatButton onClick={toggleChat} />
+          <CancelButton onClick={CancelCall} />
+        </div>
+      </div>
     </div>
   );
 }

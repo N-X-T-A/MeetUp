@@ -1,0 +1,19 @@
+.video-container {
+  display: flex;
+  flex-direction: column;
+  height: 88vh;
+  overflow: hidden;
+}
+
+.video-content {
+  /* flex: 1; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.footer {
+  height: 12vh;
+  position: absolute;
+}

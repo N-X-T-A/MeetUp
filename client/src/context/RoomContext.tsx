@@ -134,6 +134,11 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
     if (audioTrack) {
       audioTrack.enabled = !audioTrack.enabled;
       setIsMicOn(audioTrack.enabled);
+      ws.emit("toggle-mic", {
+        roomId,
+        peerId: userId,
+        isMicOn: audioTrack.enabled,
+      });
     }
   };
 
@@ -198,6 +203,16 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
       ws.emit("stop-sharing");
     }
   }, [screenSharingId, roomId]);
+
+  useEffect(() => {
+    ws.on("mic-toggled", ({ peerId, isMicOn }) => {
+      dispatch({ type: "TOGGLE_MIC", payload: { peerId, isMicOn } });
+    });
+
+    return () => {
+      ws.off("mic-toggled");
+    };
+  }, []);
 
   useEffect(() => {
     if (!me) return;

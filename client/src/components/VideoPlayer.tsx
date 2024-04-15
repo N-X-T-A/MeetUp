@@ -1,19 +1,19 @@
 import { useEffect, useRef, useContext } from "react";
-import { UserContext } from "../context/UserContext";
-import { RoomContext } from "../context/RoomContext";
 import "../css/components/VideoPlayer.css";
 interface VideoPlayerProps {
   stream?: MediaStream;
   isScreenSharing?: boolean;
+  userName?: string;
+  isMicOn?: boolean;
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   stream,
   isScreenSharing,
+  userName,
+  isMicOn,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { userName } = useContext(UserContext);
-  const { isMicOn } = useContext(RoomContext);
   useEffect(() => {
     if (videoRef.current && stream) {
       videoRef.current.srcObject = stream;

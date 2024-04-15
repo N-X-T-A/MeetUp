@@ -1,4 +1,4 @@
 export interface IPeer {
-    userName: string;
-    peerId: string;
+  userName: string;
+  peerId: string;
 }
