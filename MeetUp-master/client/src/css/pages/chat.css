@@ -1,0 +1,12 @@
+.Chat
+{
+    max-height: 700px;
+    overflow-y: scroll;
+}
+
+.Member
+{
+    max-height: 700px;
+    overflow-y: scroll;
+    width: 272px;
+}

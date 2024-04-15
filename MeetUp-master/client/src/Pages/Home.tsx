@@ -97,6 +97,7 @@ export const Home = () => {
           <h4 className="h4 p-2">Kết Nối Mọi Người Lại Với Nhau Bất Kỳ Nơi Đâu, Bất Kỳ Thời Điểm Nào Thông Qua <br/> MeetUp</h4>
 
           <Join></Join>
+          <LoginButton></LoginButton>
           
         </div>
         <div className="main-slider">
@@ -142,7 +143,7 @@ export const Home = () => {
       <div className="text-area">
         <h1 className="text-style p-2">Tính năng họp và gọi video dành cho tất cả mọi người</h1>
         <h4 className="h4 p-2">Kết Nối Mọi Người Lại Với Nhau Bất Kỳ Nơi Đâu, Bất Kỳ Thời Điểm Nào Thông Qua <br/> MeetUp</h4>
-        <LoginButton></LoginButton>
+        
 
         <NameInput></NameInput>
       </div>

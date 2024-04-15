@@ -3,6 +3,7 @@ import { ChatContext } from "../../context/ChatContext";
 import { IMessage } from "../../types/chat";
 import { ChatBubble } from "./ChatBubble";
 import { ChatInput } from "./ChatInput";
+import "../../css/pages/chat.css"
 
 export const Chat: React.FC = () => {
     const { chat } = useContext(ChatContext);
@@ -12,7 +13,7 @@ export const Chat: React.FC = () => {
             className="flex flex-col h-full justify-between"
             data-testid="chat"
         >
-            <div>
+            <div className="Chat">
                 {chat.messages.map((message: IMessage) => (
                     <ChatBubble
                         message={message}
@@ -24,5 +25,6 @@ export const Chat: React.FC = () => {
             </div>
             <ChatInput />
         </div>
+        
     );
 };

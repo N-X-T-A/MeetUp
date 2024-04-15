@@ -19,7 +19,7 @@ export const ChatInput: React.FC = () => {
                 }}
             >
                 <div className="flex ">
-                    <textarea
+                    <input
                         className="border rounded"
                         onChange={(e) => setMessage(e.target.value)}
                         value={message}

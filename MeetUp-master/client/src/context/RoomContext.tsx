@@ -18,6 +18,8 @@ import {
 } from "../reducers/peerActions";
 import { UserContext } from "./UserContext";
 import { IPeer } from "../types/peer";
+import { debug } from "console";
+
 
 interface RoomValue {
   stream?: MediaStream;
@@ -32,6 +34,8 @@ interface RoomValue {
   setRoomId: (id: string) => void;
   screenSharingId: string;
   CancelCall: () => void;
+  toggleListMember:() => void;
+  isOpenList: boolean;
 }
 
 export const RoomContext = createContext<RoomValue>({
@@ -45,6 +49,9 @@ export const RoomContext = createContext<RoomValue>({
   screenSharingId: "",
   roomId: "",
   CancelCall: () => {},
+  toggleListMember:() => {},
+  isOpenList: false,
+  
 });
 
 if (!!window.Cypress) {
@@ -64,6 +71,7 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
   const [roomId, setRoomId] = useState<string>("");
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
+  const [isOpenList, setIsOpenList] = useState<boolean>(false);
 
   const enterRoom = ({ roomId }: { roomId: "string" }) => {
     navigate(`/room/${roomId}`);
@@ -243,6 +251,13 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
   //     };
   // }, [navigate]);
 
+
+  const toggleListMember = () =>
+    {
+      setIsOpenList(!isOpenList)
+      setChatOpen(false);
+    }
+
   return (
     <RoomContext.Provider
       value={{
@@ -258,6 +273,8 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
         isMicOn,
         toggleMicro,
         CancelCall,
+        toggleListMember,
+        isOpenList,
       }}
     >
       {children}

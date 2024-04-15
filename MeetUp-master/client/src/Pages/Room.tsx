@@ -6,7 +6,7 @@ import { VideoPlayer } from "../components/VideoPlayer";
 import { PeerState } from "../reducers/peerReducer";
 import { RoomContext } from "../context/RoomContext";
 import { Chat } from "../components/chat/Chat";
-import { NameInput } from "../common/Name";
+// import { NameInput } from "../common/Name";
 import { ws } from "../ws";
 import { UserContext } from "../context/UserContext";
 import { ChatContext } from "../context/ChatContext";
@@ -18,6 +18,10 @@ import { Button } from "../components/common/Button";
 import { CameraBtn } from "../components/CameraBtn";
 import { MicBtn } from "../components/MicBtn";
 import "../css/pages/Room.css"
+import { MemberButton } from "../components/MemberButton";
+import { Member } from "../components/ListMember";
+// import { RecordView } from "../components/Recorder";
+
 
 export const Room = () => {
   const { id } = useParams();
@@ -27,17 +31,19 @@ export const Room = () => {
     peers,
     shareScreen,
     screenSharingId,
-    setRoomId,
     isCameraOn,
     toggleCamera,
     isMicOn,
     toggleMicro,
     CancelCall,
+    toggleListMember,
+    isOpenList,
   } = useContext(RoomContext);
   const { userName, userId } = useContext(UserContext);
   const { toggleChat, chat } = useContext(ChatContext);
   const navigate = useNavigate();
   const [isReady, setIsReady] = useState<boolean>(false);
+  // const [isOpenList, setIsOpenList] = useState<boolean>(false);
 
   if (!!userName === false) {
     alert("Bạn cần đăng nhập để tham gia phòng");
@@ -47,22 +53,6 @@ export const Room = () => {
   } else {
     const currentURL: string = window.location.href;
     console.log("Current URL:", currentURL);
-
-    useEffect(() => {
-      if (stream)
-        ws.emit("join-room", { roomId: id, peerId: userId, userName });
-    }, [id, userId, stream, userName]);
-
-    useEffect(() => {
-      setRoomId(id || "");
-    }, [id, setRoomId]);
-
-    useEffect(() => {
-      console.log("List of peers in the room:");
-      Object.values(peers).forEach((peer) => {
-        console.log("Username:", peer.userName);
-      });
-    }, [peers]);
 
     const screenSharingVideo =
       screenSharingId === userId
@@ -75,6 +65,8 @@ export const Room = () => {
       setIsReady(true);
     };
 
+  
+
     return isReady ? (
       <div className="flex flex-col min-h-screen">
         <div className="bg-red-500 p-4 text-white">
@@ -82,6 +74,8 @@ export const Room = () => {
           <CopyToClipboard text={id || ""}>
             <button style={{ marginLeft: "20px" }}>Copy</button>
           </CopyToClipboard>
+          
+          
         </div>
 
         <div className="flex grow">
@@ -103,7 +97,7 @@ export const Room = () => {
             {screenSharingId !== userId && (
               <div>
                 <VideoPlayer stream={stream} />
-                <NameInput />
+                {/* <NameInput /> */}
               </div>
             )}
 
@@ -116,11 +110,19 @@ export const Room = () => {
                 </div>
               ))}
           </div>
+
           {chat.isChatOpen && (
             <div className="border-l-2 pb-28">
-              <Chat />
+              <Chat/>
             </div>
           )}
+          
+          {isOpenList && (
+            <div className="border-l-2 pb-28">
+            <Member/>
+            </div>
+          )}
+          
         </div>
 
         <div className="h-28 fixed bottom-0 p-6 w-full flex items-center justify-center border-t-2 bg-white">
@@ -128,20 +130,18 @@ export const Room = () => {
           <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
           <ShareScreenButton onClick={shareScreen} />
           <ChatButton onClick={toggleChat} />
+          <MemberButton onClick={toggleListMember}/>
           <CancelButton onClick={CancelCall} />
+          
         </div>
       </div>
     ) : (
- 
-          
-          <div className="room">
-            <div className="contenter">
-              <div className="gx-0">
-                <div className="camera-site p-5">
-                  <div className="camera-main">
-                  <VideoPlayer stream={stream}></VideoPlayer>
-                  </div>
-                  <div className="btn-site">
+          <div className="center">
+            <div className="contaier" >
+                <div className="camerasite " >
+                <VideoPlayer stream={stream}></VideoPlayer>
+                </div>
+                  <div className="btn-ready py-3">
                     <div className="row">
                       <div className="col col-lg-2 btn-cam"> <CameraBtn onClick={toggleCamera} isCameraOn={isCameraOn}></CameraBtn> </div>
                       <div className="col col-md-auto btn-mic"><MicBtn onClick={toggleMicro} isMicOn={isMicOn} /></div>
@@ -149,10 +149,7 @@ export const Room = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          
+        </div> 
     );
   }
 };

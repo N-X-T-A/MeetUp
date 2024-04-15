@@ -1,4 +1,4 @@
-import { NameInput } from "../common/Name";
+// import { NameInput } from "../common/Name";
 import { Button } from "./common/Button";
 import { IDInput } from "../common/IDRoom";
 import { ws } from "../ws";
