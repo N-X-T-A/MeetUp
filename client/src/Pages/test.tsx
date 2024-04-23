@@ -75,6 +75,8 @@ export function Test() {
     isMicOn,
     toggleMicro,
     CancelCall,
+    checkCamera,
+    checkMic,
   } = useContext(RoomContext);
   const { toggleChat, chat } = useContext(ChatContext);
 
@@ -85,9 +87,19 @@ export function Test() {
     }
   };
 
+  const handleCheckCamera = async () => {
+    const cameraPermission = await checkCamera();
+    console.log("Camera permission:", cameraPermission);
+  };
+
+  const handleCheckMic = async () => {
+    const micPermission = await checkMic();
+    console.log("Mic permission:", micPermission);
+  };
+
   return (
     <div>
-      <input
+      {/* <input
         type="number"
         value={numberOfItems}
         onChange={handleChange}
@@ -109,6 +121,11 @@ export function Test() {
           <ChatButton onClick={toggleChat} />
           <CancelButton onClick={CancelCall} />
         </div>
+      </div> */}
+
+      <div>
+        <button onClick={handleCheckCamera}>Check Camera Permission</button>
+        <button onClick={handleCheckMic}>Check Mic Permission</button>
       </div>
     </div>
   );

@@ -137,14 +137,44 @@ export const Home = () => {
             id="back"
             onClick={handleBackClick}
           >
-            <span className="material-icons">keyboard_arrow_left</span>
+            <span className="material-icons">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 19.5 8.25 12l7.5-7.5"
+                />
+              </svg>
+            </span>
           </div>
           <div
             className={`next-slide btns ${isNextDisabled ? "disable" : ""}`}
             id="next"
             onClick={handleNextClick}
           >
-            <span className="material-icons">keyboard_arrow_right</span>
+            <span className="material-icons">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                />
+              </svg>
+            </span>
           </div>
           <div
             className="slide-view"
@@ -159,7 +189,7 @@ export const Home = () => {
               {subCap}
             </div>
           </div>
-          <div className="slide-remaing">
+          {/* <div className="slide-remaing">
             <div className="pointer">
               <span
                 className={`material-icons pointer ${
@@ -178,7 +208,7 @@ export const Home = () => {
                 circle
               </span>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
@@ -218,14 +248,48 @@ export const Home = () => {
             id="back"
             onClick={handleBackClick}
           >
-            <span className="material-icons">keyboard_arrow_left</span>
+            <span className="material-icons">
+              <span className="material-icons">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15.75 19.5 8.25 12l7.5-7.5"
+                  />
+                </svg>
+              </span>
+            </span>
           </div>
           <div
             className={`next-slide btns ${isNextDisabled ? "disable" : ""}`}
             id="next"
             onClick={handleNextClick}
           >
-            <span className="material-icons">keyboard_arrow_right</span>
+            <span className="material-icons">
+              <span className="material-icons">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </span>
+            </span>
           </div>
           <div
             className="slide-view"
@@ -241,7 +305,7 @@ export const Home = () => {
             </div>
           </div>
           <div className="slide-remaing">
-            <div className="pointer">
+            {/* <div className="pointer">
               <span
                 className={`material-icons pointer ${
                   isFirstDotCurrent ? "current" : "nextone"
@@ -258,7 +322,7 @@ export const Home = () => {
               >
                 circle
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -14,7 +14,8 @@ import { CameraButton } from "../components/CameraButton";
 import { MicButton } from "../components/MicButton";
 import { CancelButton } from "../components/CancelButton";
 import { Button } from "../components/common/Button";
-
+import Draggable from "react-draggable";
+import "../css/pages/room.css";
 export const Room = () => {
   const { id } = useParams();
   const {
@@ -34,6 +35,9 @@ export const Room = () => {
   const { toggleChat, chat } = useContext(ChatContext);
   const navigate = useNavigate();
   const [isReady, setIsReady] = useState<boolean>(false);
+  // const [isMultipleUsers, setIsMultipleUsers] = useState<boolean>(false);
+
+  // const bounds = { left: 0, top: 0, right: 142, bottom: 435 };
 
   useEffect(() => {
     if (!userName) {
@@ -59,6 +63,12 @@ export const Room = () => {
     Object.values(peers).forEach((peer) => {
       console.log("Username:", peer.userName);
     });
+
+    // if (Object.keys(peers).length > 1) {
+    //   setIsMultipleUsers(true);
+    // } else {
+    //   setIsMultipleUsers(false);
+    // }
   }, [peers]);
 
   const screenSharingVideo =
@@ -73,13 +83,13 @@ export const Room = () => {
   if (!userName) return null;
 
   return isReady ? (
-    <div className="flex flex-col min-h-screen">
-      <div className="bg-red-500 p-4 text-white">
+    <div className="flex flex-col min-h-screen m-5 py-3">
+      {/* <div className="bg-red-500 p-4 text-white">
         Room id {id}
         <CopyToClipboard text={id || ""}>
           <button style={{ marginLeft: "20px" }}>Copy</button>
         </CopyToClipboard>
-      </div>
+      </div> */}
 
       <div>
         {screenSharingVideo && (
@@ -89,16 +99,12 @@ export const Room = () => {
             </div>
           </div>
         )}
-        <div
-          className={`grid gap-4 ${
-            screenSharingVideo ? "w-1/5 grid-col-1" : "grid-cols-4"
-          }`}
-        >
+        <div className="peer-grid">
           {screenSharingId !== userId && (
             <div>
               <VideoPlayer
                 stream={stream}
-                userName={userName}
+                userName={userName + " (You)"}
                 isMicOn={isMicOn}
               />
             </div>
@@ -117,13 +123,13 @@ export const Room = () => {
             ))}
         </div>
         {chat.isChatOpen && (
-          <div className="border-l-2 pb-28">
+          <div className="border-l-2 pb-28 chat">
             <Chat />
           </div>
         )}
       </div>
 
-      <div className="h-28 fixed bottom-0 p-6 w-full flex items-center justify-center border-t-2 bg-white">
+      <div className="bottom-bar">
         <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn} />
         <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
         <ShareScreenButton onClick={shareScreen} />

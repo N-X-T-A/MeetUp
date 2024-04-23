@@ -109,4 +109,4 @@ const roomHandler = (socket) => {
   socket.on("toggle-mic", toggleMic);
 };
 
-module.exports = { roomHandler };
+module.exports = { roomHandler, generateRoomId };

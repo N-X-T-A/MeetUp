@@ -50,25 +50,30 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const { name, password } = req.body;
     pool.query(
-      `SELECT * FROM user WHERE username = ?`,
-      [name],
+      `SELECT * FROM user WHERE username = '${req.body.username}'`,
       async (error, results) => {
         if (error) {
           res.status(500).json({ message: error.message });
         } else {
           if (results.length > 0) {
             const user = results[0];
-            const validPassword = await bcrypt.compare(password, user.password);
+            const validPassword = await bcrypt.compare(
+              req.body.password,
+              user.password
+            );
             if (validPassword) {
               res.status(200).json({ message: "Đăng nhập thành công" });
             } else {
+              console.log(`query error---- ${error}`);
+
               res
                 .status(401)
                 .json({ message: "Sai tên đăng nhập hoặc mật khẩu" });
             }
           } else {
+            console.log(`query error---- ${error}`);
+
             res
               .status(401)
               .json({ message: "Sai tên đăng nhập hoặc mật khẩu" });

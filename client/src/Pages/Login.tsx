@@ -29,7 +29,7 @@ export const Login: React.FC = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ name, password }),
+          body: JSON.stringify({ username: name, password }),
         });
 
         if (response.ok) {

@@ -49,6 +49,14 @@ app.use(
     methods: "*",
   })
 );
+
+app.use(express.json());
+
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 //keys and certificatse
 const key = fs.readFileSync(path.join(__dirname, "key.pem"), {
   encoding: "utf-8",
@@ -92,6 +100,10 @@ io.on("connection", (socket) => {
 
 // Mount auth router
 app.use("/api/auth", authRouter);
-
+// app.listen(3000, () => {
+//   console.log(`running at 3000`);
+// });
 //listen on port for website
 server.listen(PORT);
+
+module.exports = app;

@@ -32,6 +32,8 @@ interface RoomValue {
   setRoomId: (id: string) => void;
   screenSharingId: string;
   CancelCall: () => void;
+  checkCamera: () => Promise<boolean>;
+  checkMic: () => Promise<boolean>;
 }
 
 export const RoomContext = createContext<RoomValue>({
@@ -45,6 +47,8 @@ export const RoomContext = createContext<RoomValue>({
   screenSharingId: "",
   roomId: "",
   CancelCall: () => {},
+  checkCamera: () => Promise.resolve(false),
+  checkMic: () => Promise.resolve(false),
 });
 
 if (!!window.Cypress) {
@@ -106,6 +110,28 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
         setScreenStream(stream);
       });
     }
+  };
+
+  const checkCamera = () => {
+    return navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
+  };
+
+  const checkMic = () => {
+    return navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
   };
 
   const getUserMedia = () => {
@@ -273,6 +299,8 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
         isMicOn,
         toggleMicro,
         CancelCall,
+        checkCamera,
+        checkMic,
       }}
     >
       {children}

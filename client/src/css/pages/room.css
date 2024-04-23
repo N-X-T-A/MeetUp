@@ -1,19 +1,33 @@
-.video-container {
-  display: flex;
-  flex-direction: column;
-  height: 88vh;
+.peer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-height: calc(100vh - 28px - 200px);
   overflow: hidden;
 }
 
-.video-content {
-  /* flex: 1; */
+.peer-grid > div {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.peer-grid video {
+  width: 100%;
+  height: 100%;
+  /* object-fit: cover; */
+  background: black;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-}
-
-.footer {
-  height: 12vh;
-  position: absolute;
+  padding: 6px;
+  background-color: #fff;
 }
