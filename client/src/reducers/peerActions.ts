@@ -18,12 +18,40 @@ export const removePeerStreamAction = (peerId: string) => ({
   payload: { peerId },
 });
 
-export const addAllPeersAction = (peers: Record<string, IPeer>) => ({
-  type: ADD_ALL_PEERS,
-  payload: { peers },
-});
+export const addAllPeersAction = (peers: Record<string, IPeer>) => {
+  const peersWithDefaults: Record<string, IPeer> = {};
+  for (const peerId in peers) {
+    peersWithDefaults[peerId] = {
+      ...peers[peerId],
+      isHandRaised: false,
+      isSpeaking: false,
+    };
+  }
+  return {
+    type: ADD_ALL_PEERS,
+    payload: { peers: peersWithDefaults },
+  };
+};
 
 export const toggleMicAction = (peerId: string, isMicOn: boolean) => ({
   type: "TOGGLE_MIC",
   payload: { peerId, isMicOn },
+});
+
+export const toggleCaneraAction = (peerId: string, isCameraOn: boolean) => ({
+  type: "TOGGLE_CAMERA",
+  payload: { peerId, isCameraOn },
+});
+
+export const toggleHandRaiseAction = (
+  peerId: string,
+  isHandRaised: boolean
+) => ({
+  type: "HAND_RAISED" as const,
+  payload: { peerId, isHandRaised },
+});
+
+export const toggleAddPeerSpeaking = (peerId: string, isSpeaking: boolean) => ({
+  type: "SPEAKING" as const,
+  payload: { peerId, isSpeaking },
 });

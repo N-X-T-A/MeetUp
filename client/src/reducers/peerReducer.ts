@@ -8,7 +8,14 @@ import {
 
 export type PeerState = Record<
   string,
-  { stream?: MediaStream; userName?: string; peerId: string; isMicOn?: boolean }
+  {
+    stream?: MediaStream;
+    userName?: string;
+    peerId: string;
+    isMicOn?: boolean;
+    isHandRaised?: boolean;
+    isSpeaking?: boolean;
+  }
 >;
 
 type PeerAction =
@@ -33,6 +40,18 @@ type PeerAction =
   | {
       type: "TOGGLE_MIC";
       payload: { peerId: string; isMicOn: boolean };
+    }
+  | {
+      type: "TOGGLE_CAMERA";
+      payload: { peerId: string; isCameraOn: boolean };
+    }
+  | {
+      type: "HAND_RAISED";
+      payload: { peerId: string; isHandRaised: boolean };
+    }
+  | {
+      type: "SPEAKING";
+      payload: { peerId: string; isSpeaking: boolean };
     };
 
 export const peersReducer = (
@@ -72,6 +91,22 @@ export const peersReducer = (
         [action.payload.peerId]: {
           ...state[action.payload.peerId],
           isMicOn: action.payload.isMicOn,
+        },
+      };
+    case "HAND_RAISED":
+      return {
+        ...state,
+        [action.payload.peerId]: {
+          ...state[action.payload.peerId],
+          isHandRaised: action.payload.isHandRaised,
+        },
+      };
+    case "SPEAKING":
+      return {
+        ...state,
+        [action.payload.peerId]: {
+          ...state[action.payload.peerId],
+          isSpeaking: action.payload.isSpeaking,
         },
       };
     default:

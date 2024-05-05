@@ -1,132 +1,145 @@
-import React, { useState } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+// import React, { useContext } from "react";
+// import { RoomContext } from "../context/RoomContext";
+
+// export const Test: React.FC = () => {
+//   const {
+//     audioInputDevices,
+//     audioOutputDevices,
+//     videoInputDevices,
+//     changeAudioInputDevice,
+//     changeAudioOutputDevice,
+//     changeVideoInputDevice,
+//   } = useContext(RoomContext);
+
+//   const handleChange = (
+//     event: React.ChangeEvent<HTMLSelectElement>,
+//     changeDevice: ((deviceId: string) => void) | undefined
+//   ) => {
+//     const deviceId = event.target.value;
+//     if (changeDevice) {
+//       changeDevice(deviceId);
+//     } else {
+//       console.error("Change device function is undefined!");
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <label htmlFor="audioInput">Audio Input:</label>
+//       <select
+//         id="audioInput"
+//         onChange={(e) => handleChange(e, changeAudioInputDevice)}
+//       >
+//         {audioInputDevices &&
+//           audioInputDevices.map((device) => (
+//             <option key={device.deviceId} value={device.deviceId}>
+//               {device.label}
+//             </option>
+//           ))}
+//       </select>
+
+//       <label htmlFor="audioOutput">Audio Output:</label>
+//       <select
+//         id="audioOutput"
+//         onChange={(e) => handleChange(e, changeAudioOutputDevice)}
+//       >
+//         {audioOutputDevices &&
+//           audioOutputDevices.map((device) => (
+//             <option key={device.deviceId} value={device.deviceId}>
+//               {device.label}
+//             </option>
+//           ))}
+//       </select>
+
+//       <label htmlFor="videoInput">Video Input:</label>
+//       <select
+//         id="videoInput"
+//         onChange={(e) => handleChange(e, changeVideoInputDevice)}
+//       >
+//         {videoInputDevices &&
+//           videoInputDevices.map((device) => (
+//             <option key={device.deviceId} value={device.deviceId}>
+//               {device.label}
+//             </option>
+//           ))}
+//       </select>
+//     </div>
+//   );
+// };
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { VideoPlayer } from "../components/VideoPlayer";
-import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import { RoomContext } from "../context/RoomContext";
-import { CameraButton } from "../components/CameraButton";
-import { MicButton } from "../components/MicButton";
-import { ShareScreenButton } from "../components/ShareScreeenButton";
-import { ChatButton } from "../components/ChatButton";
-import { CancelButton } from "../components/CancelButton";
-import { ChatContext } from "../context/ChatContext";
-import { Chat } from "../components/chat/Chat"; // Import the Chat component
+export const Test: React.FC = () => {
+  const divRef = useRef<HTMLDivElement>(null);
+  const [isSoundDetected, setIsSoundDetected] = useState(false);
+  const [isMicrophoneActive, setIsMicrophoneActive] = useState(true);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const { stream, isMicOn, isHandRaised } = useContext(RoomContext);
+  const { userName } = useContext(UserContext);
+  useEffect(() => {
+    const handleSuccess = (stream: MediaStream) => {
+      mediaStreamRef.current = stream;
+      const audioContext = new AudioContext();
+      const audioSource = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 256;
+      audioSource.connect(analyser);
 
-interface AutoLayoutExampleProps {
-  numberOfItems: number;
-}
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
 
-function AutoLayoutExample({ numberOfItems }: AutoLayoutExampleProps) {
-  const { stream } = useContext(RoomContext);
+      const detectSound = () => {
+        analyser.getByteFrequencyData(dataArray);
+        const avg = dataArray.reduce((acc, val) => acc + val, 0) / bufferLength;
+        setIsSoundDetected(avg > 20); // Adjust threshold as needed
+        requestAnimationFrame(detectSound);
+      };
 
-  const maxCols = 3; // Số cột tối đa trong mỗi hàng
-  const maxItemsPerGrid = 9; // Số ô tối đa mà chúng ta muốn hiển thị mỗi lần
+      detectSound();
+    };
 
-  // Tính toán số hàng và số cột dựa trên số lượng items
-  let numRows = Math.ceil(numberOfItems / maxCols);
-  let numCols = Math.min(numberOfItems, maxCols);
+    const handleError = (error: Error) => {
+      console.error("Error accessing microphone:", error);
+    };
 
-  // Nếu số lượng items vượt quá số lượng ô tối đa, thì chúng ta sẽ hiển thị
-  // tối đa số lượng ô tối đa, và tính toán lại số hàng và số cột.
-  if (numberOfItems > maxItemsPerGrid) {
-    numRows = Math.ceil(maxItemsPerGrid / maxCols);
-    numCols = maxCols;
-  }
-
-  // Tạo các hàng và cột cho grid
-  const rows: JSX.Element[] = [];
-  for (let i = 0; i < numRows; i++) {
-    const cols: JSX.Element[] = [];
-    for (let j = 0; j < numCols; j++) {
-      const index = i * maxCols + j;
-      // Hiển thị số lượng còn lại khi số lượng vượt quá maxItemsPerGrid
-      if (index === maxItemsPerGrid - 1 && numberOfItems > maxItemsPerGrid) {
-        cols.push(
-          <Col key={index} style={{ backgroundColor: "black", color: "white" }}>
-            +{numberOfItems - maxItemsPerGrid + 1}
-          </Col>
-        );
-      } else if (index < numberOfItems) {
-        // Hiển thị video player nếu vị trí index cần hiển thị
-        cols.push(<Col key={index}>{<VideoPlayer stream={stream} />}</Col>);
-      } else {
-        // Hiển thị ô trống nếu không đủ items
-        cols.push(<Col key={index}></Col>);
+    if (isMicrophoneActive) {
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then(handleSuccess)
+        .catch(handleError);
+    } else {
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+        mediaStreamRef.current = null;
       }
     }
-    rows.push(<Row key={i}>{cols}</Row>);
-  }
+  }, [isMicrophoneActive]);
 
-  return <Container style={{ width: "60%" }}>{rows}</Container>;
-}
-
-export function Test() {
-  const [numberOfItems, setNumberOfItems] = useState(9);
-  const {
-    stream,
-    screenStream,
-    peers,
-    shareScreen,
-    screenSharingId,
-    setRoomId,
-    isCameraOn,
-    toggleCamera,
-    isMicOn,
-    toggleMicro,
-    CancelCall,
-    checkCamera,
-    checkMic,
-  } = useContext(RoomContext);
-  const { toggleChat, chat } = useContext(ChatContext);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(event.target.value);
-    if (!isNaN(value)) {
-      setNumberOfItems(value);
-    }
-  };
-
-  const handleCheckCamera = async () => {
-    const cameraPermission = await checkCamera();
-    console.log("Camera permission:", cameraPermission);
-  };
-
-  const handleCheckMic = async () => {
-    const micPermission = await checkMic();
-    console.log("Mic permission:", micPermission);
+  const toggleMicrophone = () => {
+    setIsMicrophoneActive((prevState) => !prevState);
   };
 
   return (
-    <div>
-      {/* <input
-        type="number"
-        value={numberOfItems}
-        onChange={handleChange}
-        min="1"
-      />
-      <AutoLayoutExample numberOfItems={numberOfItems} />
-      <div>
-        {chat.isChatOpen && (
-          <div className="border-l-2 pb-28">
-            <Chat />
-          </div>
-        )}
+    <div className="App">
+      <div
+        className={isSoundDetected ? "highlight" : ""}
+        ref={divRef}
+        style={{
+          border: "5px solid",
+          borderColor: isSoundDetected ? "blue" : "black",
+        }}
+      >
+        <VideoPlayer
+          stream={stream}
+          userName={userName + " (You)"}
+          isMicOn={isMicOn}
+          isHandRaised={isHandRaised}
+        />
       </div>
-      <div>
-        <div className="h-28 fixed bottom-0 p-6 w-full flex items-center justify-center border-t-2 bg-white">
-          <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn} />
-          <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
-          <ShareScreenButton onClick={shareScreen} />
-          <ChatButton onClick={toggleChat} />
-          <CancelButton onClick={CancelCall} />
-        </div>
-      </div> */}
-
-      <div>
-        <button onClick={handleCheckCamera}>Check Camera Permission</button>
-        <button onClick={handleCheckMic}>Check Mic Permission</button>
-      </div>
+      <button onClick={toggleMicrophone}>
+        {isMicrophoneActive ? "Stop Microphone" : "Start Microphone"}
+      </button>
     </div>
   );
-}
+};
