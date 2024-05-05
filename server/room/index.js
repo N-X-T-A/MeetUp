@@ -97,7 +97,12 @@ const roomHandler = (socket) => {
   const toggleMic = ({ roomId, peerId, isMicOn }) => {
     socket.to(roomId).emit("mic-toggled", { peerId, isMicOn });
   };
-
+  const toggleHandRaised = ({ roomId, peerId, isHandRaised }) => {
+    socket.to(roomId).emit("handraised-toggled", { peerId, isHandRaised });
+  };
+  const check_isSpeaking = ({ roomId, peerId, isSpeaking }) => {
+    socket.to(roomId).emit("speaking_Checked", { peerId, isSpeaking });
+  };
   socket.on("create-room", createRoom);
   socket.on("join-room", joinRoom);
   socket.on("check-room", checkRoom);
@@ -107,6 +112,8 @@ const roomHandler = (socket) => {
   socket.on("change-name", changeName);
   socket.on("leave-room", leaveRoom);
   socket.on("toggle-mic", toggleMic);
+  socket.on("toggle-handraised", toggleHandRaised);
+  socket.on("check_isSpeaking", check_isSpeaking);
 };
 
 module.exports = { roomHandler, generateRoomId };

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ShareScreenButton } from "../components/ShareScreeenButton";
 import { ChatButton } from "../components/ChatButton";
@@ -16,6 +16,7 @@ import { CancelButton } from "../components/CancelButton";
 import { Button } from "../components/common/Button";
 import Draggable from "react-draggable";
 import "../css/pages/room.css";
+import { HandRaiseButton } from "../components/HandRaiseButton";
 export const Room = () => {
   const { id } = useParams();
   const {
@@ -30,14 +31,40 @@ export const Room = () => {
     isMicOn,
     toggleMicro,
     CancelCall,
+    HandRaise,
+    isHandRaised,
+    audioInputDevices,
+    changeAudioInputDevice,
+    audioOutputDevices,
+    changeAudioOutputDevice,
+    videoInputDevices,
+    changeVideoInputDevice,
+    loadSelectedVideoDevice,
+    isSoundDetected,
   } = useContext(RoomContext);
   const { userName, userId } = useContext(UserContext);
   const { toggleChat, chat } = useContext(ChatContext);
   const navigate = useNavigate();
+  const divRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState<boolean>(false);
   // const [isMultipleUsers, setIsMultipleUsers] = useState<boolean>(false);
-
   // const bounds = { left: 0, top: 0, right: 142, bottom: 435 };
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(
+    loadSelectedVideoDevice()
+  );
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    changeDevice: ((deviceId: string) => void) | undefined
+  ) => {
+    const deviceId = event.target.value;
+    setSelectedDeviceId(deviceId);
+    if (changeDevice) {
+      changeDevice(deviceId);
+    } else {
+      console.error("Change device function is undefined!");
+    }
+  };
 
   useEffect(() => {
     if (!userName) {
@@ -57,19 +84,24 @@ export const Room = () => {
   useEffect(() => {
     setRoomId(id || "");
   }, [id, setRoomId]);
+  useEffect(() => {
+    console.log("List of peers raise hand in the room:");
+    Object.values(peers).forEach((peer) => {
+      if (peer.isHandRaised) {
+        console.log("Username:", peer.userName);
+      }
+    });
+  }, [peers, isHandRaised]);
 
   useEffect(() => {
-    console.log("List of peers in the room:");
-    Object.values(peers).forEach((peer) => {
-      console.log("Username:", peer.userName);
-    });
+    setSelectedDeviceId(loadSelectedVideoDevice());
+  }, [videoInputDevices]);
 
-    // if (Object.keys(peers).length > 1) {
-    //   setIsMultipleUsers(true);
-    // } else {
-    //   setIsMultipleUsers(false);
-    // }
-  }, [peers]);
+  // useEffect(() => {
+  //   // Đếm số lượng peers và log ra console
+  //   const numberOfPeers = Object.values(peers).length;
+  //   console.log("Number of peers:", numberOfPeers);
+  // }, [peers]);
 
   const screenSharingVideo =
     screenSharingId === userId ? screenStream : peers[screenSharingId]?.stream;
@@ -101,11 +133,19 @@ export const Room = () => {
         )}
         <div className="peer-grid">
           {screenSharingId !== userId && (
-            <div>
+            <div
+              className={isSoundDetected ? "highlight" : ""}
+              ref={divRef}
+              style={{
+                border: "5px solid",
+                borderColor: isSoundDetected ? "green" : "black",
+              }}
+            >
               <VideoPlayer
                 stream={stream}
                 userName={userName + " (You)"}
                 isMicOn={isMicOn}
+                isHandRaised={isHandRaised}
               />
             </div>
           )}
@@ -113,11 +153,20 @@ export const Room = () => {
           {Object.values(peersToShow as PeerState)
             .filter((peer) => !!peer.stream)
             .map((peer) => (
-              <div key={peer.peerId}>
+              <div
+                key={peer.peerId}
+                className={peer.isSpeaking ? "highlight" : ""}
+                ref={divRef}
+                style={{
+                  border: "5px solid",
+                  borderColor: peer.isSpeaking ? "green" : "black",
+                }}
+              >
                 <VideoPlayer
                   stream={peer.stream}
                   userName={peer.userName}
                   isMicOn={peer.isMicOn}
+                  isHandRaised={peer.isHandRaised}
                 />
               </div>
             ))}
@@ -134,7 +183,33 @@ export const Room = () => {
         <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
         <ShareScreenButton onClick={shareScreen} />
         <ChatButton onClick={toggleChat} />
+        <HandRaiseButton onClick={HandRaise} />
         <CancelButton onClick={CancelCall} />
+        <div>
+          <select
+            id="videoInput"
+            value={selectedDeviceId || ""}
+            onChange={(e) => handleChange(e, changeVideoInputDevice)}
+          >
+            {videoInputDevices &&
+              videoInputDevices.map((device) => (
+                <option key={device.deviceId} value={device.deviceId}>
+                  {device.label}
+                </option>
+              ))}
+          </select>
+        </div>
+        <select
+          id="audioInput"
+          onChange={(e) => handleChange(e, changeAudioInputDevice)}
+        >
+          {audioInputDevices &&
+            audioInputDevices.map((device) => (
+              <option key={device.deviceId} value={device.deviceId}>
+                {device.label}
+              </option>
+            ))}
+        </select>
       </div>
     </div>
   ) : (
