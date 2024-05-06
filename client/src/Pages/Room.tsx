@@ -17,6 +17,12 @@ import { Button } from "../components/common/Button";
 import Draggable from "react-draggable";
 import "../css/pages/room.css";
 import { HandRaiseButton } from "../components/HandRaiseButton";
+import { Member } from "../components/MemberList";
+import { SettingButton } from "../components/SettingButton";
+import { UserListButton } from "../components/UserListButton";
+
+
+
 export const Room = () => {
   const { id } = useParams();
   const {
@@ -52,6 +58,12 @@ export const Room = () => {
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(
     loadSelectedVideoDevice()
   );
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
+  const [showChat, setShowChat] = useState(false);
+  const [showMember, setShowMember] = useState(false);
+  const [copied, setCopied] = useState(false);
+
 
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -97,6 +109,10 @@ export const Room = () => {
     setSelectedDeviceId(loadSelectedVideoDevice());
   }, [videoInputDevices]);
 
+  useEffect(() => {
+    setIsSidebarCollapsed(true);
+  }, []);
+
   // useEffect(() => {
   //   // Đếm số lượng peers và log ra console
   //   const numberOfPeers = Object.values(peers).length;
@@ -114,16 +130,33 @@ export const Room = () => {
 
   if (!userName) return null;
 
-  return isReady ? (
-    <div className="flex flex-col min-h-screen m-5 py-3">
-      {/* <div className="bg-red-500 p-4 text-white">
-        Room id {id}
-        <CopyToClipboard text={id || ""}>
-          <button style={{ marginLeft: "20px" }}>Copy</button>
-        </CopyToClipboard>
-      </div> */}
+  const handleChatButtonClick = () => {
+    setShowChat(!showChat);
+    setShowMember(false); 
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
 
-      <div>
+  const handleListButtonClick = () => {
+    setShowMember(!showMember);
+    setShowChat(false); 
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+
+  const toggleDialog = () => {
+    setIsDialogOpen(!isDialogOpen);
+  };
+
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 5000);
+  };
+
+  return isReady ? (
+    <div className="Main">
+      <div className="row">
+        <div className={`col-md-${isSidebarCollapsed ? '12' : '9'}`}>
         {screenSharingVideo && (
           <div className="w-4/5 pr-4">
             <div className="relative h-full">
@@ -171,45 +204,86 @@ export const Room = () => {
               </div>
             ))}
         </div>
-        {chat.isChatOpen && (
-          <div className="border-l-2 pb-28 chat">
-            <Chat />
+        </div>
+        {showChat && (
+          <div className="col-md-3">
+            <div className="sidebar">
+              <Chat />
+            </div>
+          </div>
+        )}
+
+        {showMember && (
+          <div className="col-md-3">
+            <div className="sidebar">
+              <Member />
+            </div>
+          </div>
+        )}
+
+        {isDialogOpen && (
+          <div className="dialog-overlay">
+            <div className="dialog">
+              <div className="p-5">
+                <h1>Thay đổi đầu vào camera</h1>
+                <select
+                  id="videoInput"
+                  value={selectedDeviceId || ""}
+                  onChange={(e) => handleChange(e, changeVideoInputDevice)}
+                >
+                  {videoInputDevices &&
+                    videoInputDevices.map((device) => (
+                      <option key={device.deviceId} value={device.deviceId}>
+                        {device.label}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="p-5">
+              <h1>Thay đổi đầu vào Microphone</h1>
+                <div className="Mic-Input">
+                  <select
+                    id="audioInput"
+                    onChange={(e) => handleChange(e, changeAudioInputDevice)}
+                  >
+                    {audioInputDevices &&
+                      audioInputDevices.map((device) => (
+                        <option key={device.deviceId} value={device.deviceId}>
+                          {device.label}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
 
-      <div className="bottom-bar">
-        <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn} />
-        <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
-        <ShareScreenButton onClick={shareScreen} />
-        <ChatButton onClick={toggleChat} />
-        <HandRaiseButton onClick={HandRaise} />
-        <CancelButton onClick={CancelCall} />
-        <div>
-          <select
-            id="videoInput"
-            value={selectedDeviceId || ""}
-            onChange={(e) => handleChange(e, changeVideoInputDevice)}
-          >
-            {videoInputDevices &&
-              videoInputDevices.map((device) => (
-                <option key={device.deviceId} value={device.deviceId}>
-                  {device.label}
-                </option>
-              ))}
-          </select>
+
+      <div className="row bottom-bar">
+        <div className="col d-flex justify-content-center">
+            
+            <CopyToClipboard text={id || ""} onCopy={handleCopy}>
+              <Button className="p-4 mx-2">
+                {copied ? `Đã Sao Chép` : `Room id ${id}`}
+              </Button>
+            </CopyToClipboard>
         </div>
-        <select
-          id="audioInput"
-          onChange={(e) => handleChange(e, changeAudioInputDevice)}
-        >
-          {audioInputDevices &&
-            audioInputDevices.map((device) => (
-              <option key={device.deviceId} value={device.deviceId}>
-                {device.label}
-              </option>
-            ))}
-        </select>
+
+        <div className="col d-flex justify-content-center">
+          <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn} />
+          <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
+          <ShareScreenButton onClick={shareScreen} />
+          <HandRaiseButton onClick={HandRaise} />
+          <CancelButton onClick={CancelCall} />
+        </div>
+
+        <div className="col d-flex justify-content-center">
+        <SettingButton onClick={toggleDialog}/>
+        <ChatButton onClick={handleChatButtonClick} />
+        <UserListButton onClick={handleListButtonClick} />
+        </div>
       </div>
     </div>
   ) : (

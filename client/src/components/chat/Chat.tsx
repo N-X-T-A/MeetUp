@@ -4,12 +4,13 @@ import { IMessage } from "../../types/chat";
 import { ChatBubble } from "./ChatBubble";
 import { ChatInput } from "./ChatInput";
 
+
 export const Chat: React.FC = () => {
   const { chat } = useContext(ChatContext);
 
   return (
     <div className="flex flex-col h-full justify-between" data-testid="chat">
-      <div>
+      <div className="ChatTextList" style={{height: "81vh", overflowY:"scroll"}}>
         {chat.messages.map((message: IMessage) => (
           <ChatBubble
             message={message}

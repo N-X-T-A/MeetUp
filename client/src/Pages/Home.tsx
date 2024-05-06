@@ -5,6 +5,7 @@ import "../css/pages/home.css";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/common/Button";
+import { NameInput } from "../common/Name";
 
 export const Home = () => {
   const { userName } = useContext(UserContext);
@@ -128,6 +129,7 @@ export const Home = () => {
             Kết Nối Mọi Người Lại Với Nhau Bất Kỳ Nơi Đâu, Bất Kỳ Thời Điểm Nào
             Thông Qua <br /> MeetUp
           </h4>
+          <NameInput></NameInput>
 
           <Join></Join>
         </div>
@@ -241,6 +243,7 @@ export const Home = () => {
             {" "}
             Hãy Đăng Nhập Để Tham Gia Cuộc Họp{" "}
           </Button>
+          <NameInput></NameInput>
         </div>
         <div className="main-slider">
           <div
