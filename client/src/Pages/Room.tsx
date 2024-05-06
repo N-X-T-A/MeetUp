@@ -49,7 +49,7 @@ export const Room = () => {
     isSoundDetected,
   } = useContext(RoomContext);
   const { userName, userId } = useContext(UserContext);
-  const { toggleChat, chat } = useContext(ChatContext);
+  const { toggleChat, chat} = useContext(ChatContext);
   const navigate = useNavigate();
   const divRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -133,13 +133,17 @@ export const Room = () => {
   const handleChatButtonClick = () => {
     setShowChat(!showChat);
     setShowMember(false); 
-    setIsSidebarCollapsed(!isSidebarCollapsed);
+    if (!showMember) {
+      setIsSidebarCollapsed(!isSidebarCollapsed);
+    }
   };
 
   const handleListButtonClick = () => {
     setShowMember(!showMember);
     setShowChat(false); 
-    setIsSidebarCollapsed(!isSidebarCollapsed);
+    if (!showChat) {
+      setIsSidebarCollapsed(!isSidebarCollapsed);
+    } 
   };
 
   const toggleDialog = () => {
