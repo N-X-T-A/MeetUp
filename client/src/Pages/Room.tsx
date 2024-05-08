@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ShareScreenButton } from "../components/ShareScreeenButton";
 import { ChatButton } from "../components/ChatButton";
@@ -20,8 +20,6 @@ import { HandRaiseButton } from "../components/HandRaiseButton";
 import { Member } from "../components/MemberList";
 import { SettingButton } from "../components/SettingButton";
 import { UserListButton } from "../components/UserListButton";
-
-
 
 export const Room = () => {
   const { id } = useParams();
@@ -49,12 +47,10 @@ export const Room = () => {
     isSoundDetected,
   } = useContext(RoomContext);
   const { userName, userId } = useContext(UserContext);
-  const { toggleChat, chat} = useContext(ChatContext);
+  const { toggleChat, chat } = useContext(ChatContext);
   const navigate = useNavigate();
   const divRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState<boolean>(false);
-  // const [isMultipleUsers, setIsMultipleUsers] = useState<boolean>(false);
-  // const bounds = { left: 0, top: 0, right: 142, bottom: 435 };
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(
     loadSelectedVideoDevice()
   );
@@ -63,7 +59,6 @@ export const Room = () => {
   const [showChat, setShowChat] = useState(false);
   const [showMember, setShowMember] = useState(false);
   const [copied, setCopied] = useState(false);
-
 
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -96,6 +91,7 @@ export const Room = () => {
   useEffect(() => {
     setRoomId(id || "");
   }, [id, setRoomId]);
+
   useEffect(() => {
     console.log("List of peers raise hand in the room:");
     Object.values(peers).forEach((peer) => {
@@ -113,12 +109,6 @@ export const Room = () => {
     setIsSidebarCollapsed(true);
   }, []);
 
-  // useEffect(() => {
-  //   // Đếm số lượng peers và log ra console
-  //   const numberOfPeers = Object.values(peers).length;
-  //   console.log("Number of peers:", numberOfPeers);
-  // }, [peers]);
-
   const screenSharingVideo =
     screenSharingId === userId ? screenStream : peers[screenSharingId]?.stream;
 
@@ -132,7 +122,7 @@ export const Room = () => {
 
   const handleChatButtonClick = () => {
     setShowChat(!showChat);
-    setShowMember(false); 
+    setShowMember(false);
     if (!showMember) {
       setIsSidebarCollapsed(!isSidebarCollapsed);
     }
@@ -140,10 +130,10 @@ export const Room = () => {
 
   const handleListButtonClick = () => {
     setShowMember(!showMember);
-    setShowChat(false); 
+    setShowChat(false);
     if (!showChat) {
       setIsSidebarCollapsed(!isSidebarCollapsed);
-    } 
+    }
   };
 
   const toggleDialog = () => {
@@ -161,53 +151,53 @@ export const Room = () => {
     <div className="Main">
       <div className="row">
         <div className={`col-md-${isSidebarCollapsed ? '12' : '9'}`}>
-        {screenSharingVideo && (
-          <div className="w-4/5 pr-4">
-            <div className="relative h-full">
-              <VideoPlayer stream={screenSharingVideo} isScreenSharing={true} />
-            </div>
-          </div>
-        )}
-        <div className="peer-grid">
-          {screenSharingId !== userId && (
-            <div
-              className={isSoundDetected ? "highlight" : ""}
-              ref={divRef}
-              style={{
-                border: "5px solid",
-                borderColor: isSoundDetected ? "green" : "black",
-              }}
-            >
-              <VideoPlayer
-                stream={stream}
-                userName={userName + " (You)"}
-                isMicOn={isMicOn}
-                isHandRaised={isHandRaised}
-              />
+          {screenSharingVideo && (
+            <div className="w-4/5 pr-4">
+              <div className="relative h-full">
+                <VideoPlayer stream={screenSharingVideo} isScreenSharing={true} />
+              </div>
             </div>
           )}
-
-          {Object.values(peersToShow as PeerState)
-            .filter((peer) => !!peer.stream)
-            .map((peer) => (
+          <div className="peer-grid">
+            {screenSharingId !== userId && (
               <div
-                key={peer.peerId}
-                className={peer.isSpeaking ? "highlight" : ""}
+                className={isSoundDetected ? "highlight" : ""}
                 ref={divRef}
                 style={{
                   border: "5px solid",
-                  borderColor: peer.isSpeaking ? "green" : "black",
+                  borderColor: isSoundDetected ? "green" : "black",
                 }}
               >
                 <VideoPlayer
-                  stream={peer.stream}
-                  userName={peer.userName}
-                  isMicOn={peer.isMicOn}
-                  isHandRaised={peer.isHandRaised}
+                  stream={stream}
+                  userName={userName + " (You)"}
+                  isMicOn={isMicOn}
+                  isHandRaised={isHandRaised}
                 />
               </div>
-            ))}
-        </div>
+            )}
+
+            {Object.values(peersToShow as PeerState)
+              .filter((peer) => !!peer.stream)
+              .map((peer) => (
+                <div
+                  key={peer.peerId}
+                  className={peer.isSpeaking ? "highlight" : ""}
+                  ref={divRef}
+                  style={{
+                    border: "5px solid",
+                    borderColor: peer.isSpeaking ? "green" : "black",
+                  }}
+                >
+                  <VideoPlayer
+                    stream={peer.stream}
+                    userName={peer.userName}
+                    isMicOn={peer.isMicOn}
+                    isHandRaised={peer.isHandRaised}
+                  />
+                </div>
+              ))}
+          </div>
         </div>
         {showChat && (
           <div className="col-md-3">
@@ -244,7 +234,7 @@ export const Room = () => {
                 </select>
               </div>
               <div className="p-5">
-              <h1>Thay đổi đầu vào Microphone</h1>
+                <h1>Thay đổi đầu vào Microphone</h1>
                 <div className="Mic-Input">
                   <select
                     id="audioInput"
@@ -264,15 +254,13 @@ export const Room = () => {
         )}
       </div>
 
-
       <div className="row bottom-bar">
         <div className="col d-flex justify-content-center">
-            
-            <CopyToClipboard text={id || ""} onCopy={handleCopy}>
-              <Button className="p-4 mx-2">
-                {copied ? `Đã Sao Chép` : `Room id ${id}`}
-              </Button>
-            </CopyToClipboard>
+          <CopyToClipboard text={id || ""} onCopy={handleCopy}>
+            <Button className="p-4 mx-2">
+              {copied ? `Đã Sao Chép` : `Room id ${id}`}
+            </Button>
+          </CopyToClipboard>
         </div>
 
         <div className="col d-flex justify-content-center">
@@ -284,9 +272,9 @@ export const Room = () => {
         </div>
 
         <div className="col d-flex justify-content-center">
-        <SettingButton onClick={toggleDialog}/>
-        <ChatButton onClick={handleChatButtonClick} />
-        <UserListButton onClick={handleListButtonClick} />
+          <SettingButton onClick={toggleDialog} />
+          <ChatButton onClick={handleChatButtonClick} />
+          <UserListButton onClick={handleListButtonClick} />
         </div>
       </div>
     </div>

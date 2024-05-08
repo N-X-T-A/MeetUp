@@ -193,3 +193,33 @@ body {
 a {
   text-decoration: none;
 }
+@media screen and (max-width: 768px) {
+  .main-slider
+  {
+    display: none;
+  }
+
+  .main {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .text-area {
+    margin-top: 20px;
+    margin-left: 0;
+  }
+
+  #Date{
+    font-size: 10px;
+  }
+
+  #time
+  {
+    font-size: 10px;
+  }
+  .h4
+  {
+    margin-left: 0;
+  }
+
+}
