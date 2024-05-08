@@ -23,3 +23,12 @@
 .userMic[stroke="red"] {
   display: inline-block;
 }
+
+.Avatar
+{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-570px);
+
+}

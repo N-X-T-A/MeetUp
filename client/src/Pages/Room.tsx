@@ -46,7 +46,7 @@ export const Room = () => {
     loadSelectedVideoDevice,
     isSoundDetected,
   } = useContext(RoomContext);
-  const { userName, userId } = useContext(UserContext);
+  const { userName, userId, Avatar } = useContext(UserContext);
   const { toggleChat, chat } = useContext(ChatContext);
   const navigate = useNavigate();
   const divRef = useRef<HTMLDivElement>(null);
@@ -60,6 +60,7 @@ export const Room = () => {
   const [showMember, setShowMember] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
     changeDevice: ((deviceId: string) => void) | undefined
@@ -99,7 +100,7 @@ export const Room = () => {
         console.log("Username:", peer.userName);
       }
     });
-  }, [peers, isHandRaised]);
+  }, [isHandRaised]);
 
   useEffect(() => {
     setSelectedDeviceId(loadSelectedVideoDevice());
@@ -150,11 +151,15 @@ export const Room = () => {
   return isReady ? (
     <div className="Main">
       <div className="row">
-        <div className={`col-md-${isSidebarCollapsed ? '12' : '9'}`}>
+        <div className={`col-md-${isSidebarCollapsed ? "12" : "9"}`}>
           {screenSharingVideo && (
             <div className="w-4/5 pr-4">
               <div className="relative h-full">
-                <VideoPlayer stream={screenSharingVideo} isScreenSharing={true} />
+                <VideoPlayer
+                  stream={screenSharingVideo}
+                  isScreenSharing={true}
+                />
+                
               </div>
             </div>
           )}
@@ -166,13 +171,18 @@ export const Room = () => {
                 style={{
                   border: "5px solid",
                   borderColor: isSoundDetected ? "green" : "black",
-                }}
-              >
+                }}>
+
+                {/* {isCameraOn === false && (<div className="Avatar">
+                  <Avatar />
+                </div>)} */}
+
                 <VideoPlayer
                   stream={stream}
                   userName={userName + " (You)"}
                   isMicOn={isMicOn}
                   isHandRaised={isHandRaised}
+                  isCameraOn={isCameraOn}
                 />
               </div>
             )}
@@ -189,16 +199,26 @@ export const Room = () => {
                     borderColor: peer.isSpeaking ? "green" : "black",
                   }}
                 >
+                  {/* {isCameraOn === false && (<div className="Avatar">
+                    <Avatar />
+                  </div>)} */}
+
                   <VideoPlayer
                     stream={peer.stream}
                     userName={peer.userName}
                     isMicOn={peer.isMicOn}
                     isHandRaised={peer.isHandRaised}
+                    isCameraOn={isCameraOn}
                   />
+                  
+
                 </div>
               ))}
           </div>
         </div>
+
+        
+
         {showChat && (
           <div className="col-md-3">
             <div className="sidebar">
