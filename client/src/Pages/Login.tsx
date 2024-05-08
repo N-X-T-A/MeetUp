@@ -1,19 +1,16 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useExternalIP } from "../common/ExternalIP";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleHalfStroke } from "@fortawesome/free-solid-svg-icons";
 import "../css/pages/login.css";
 import { UserContext } from "../context/UserContext";
-import { F_Login } from "../components/Alert/F_Login";
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
-  const { userName, setUserName } = useContext(UserContext);
+  const { userName, setUserName } = useContext(UserContext); // Thêm userAvatar vào context
 
   const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false); // State để lưu trạng thái hiển thị mật khẩu
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const externalIP = useExternalIP();
 
   const storedURL: string | null = localStorage.getItem("currentURL");
@@ -33,8 +30,9 @@ export const Login: React.FC = () => {
         });
 
         if (response.ok) {
-          setUserName(name);
-          //navigate("/");
+          const data = await response.json();
+          setUserName(data.name);
+          //setUserAvatar(data.avatar);
           if (storedURL && storedURL !== "") {
             window.location.href = storedURL;
           } else {
