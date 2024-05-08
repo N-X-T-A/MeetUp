@@ -18,7 +18,7 @@ router.post("/register", async (req, res) => {
   try {
     const { username, password, name } = req.body;
     pool.query(
-      `SELECT * FROM user WHERE username = ?`,
+      `SELECT * FROM users WHERE username = ?`,
       [username],
       async (error, results) => {
         if (error) {
@@ -29,7 +29,7 @@ router.post("/register", async (req, res) => {
           } else {
             const hashedPassword = await bcrypt.hash(password, 10);
             pool.query(
-              `INSERT INTO user (username, password, name) VALUES (?, ?, ?)`,
+              `INSERT INTO users (username, password, name) VALUES (?, ?, ?)`,
               [username, hashedPassword, name],
               (error, results) => {
                 if (error) {
@@ -51,7 +51,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     pool.query(
-      `SELECT * FROM user WHERE username = '${req.body.username}'`,
+      `SELECT * FROM users WHERE username = '${req.body.username}'`,
       async (error, results) => {
         if (error) {
           res.status(500).json({ message: error.message });
@@ -63,7 +63,9 @@ router.post("/login", async (req, res) => {
               user.password
             );
             if (validPassword) {
-              res.status(200).json({ message: "Đăng nhập thành công" });
+              res
+                .status(200)
+                .json({ message: "Đăng nhập thành công", name: user.name });
             } else {
               console.log(`query error---- ${error}`);
 
