@@ -93,6 +93,7 @@ export const Room = () => {
   useEffect(() => {
     setRoomId(id || "");
   }, [id, setRoomId]);
+
   useEffect(() => {
     console.log("List of peers raise hand in the room:");
     Object.values(peers).forEach((peer) => {
@@ -100,7 +101,7 @@ export const Room = () => {
         console.log("Username:", peer.userName);
       }
     });
-  }, [peers, isHandRaised]);
+  }, [isHandRaised]);
 
   useEffect(() => {
     setSelectedDeviceId(loadSelectedVideoDevice());
