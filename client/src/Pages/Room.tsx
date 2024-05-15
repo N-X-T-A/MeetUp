@@ -20,7 +20,10 @@ import { HandRaiseButton } from "../components/HandRaiseButton";
 import { Member } from "../components/MemberList";
 import { SettingButton } from "../components/SettingButton";
 import { UserListButton } from "../components/UserListButton";
+<<<<<<< HEAD
 import "../../src/css/Button.css"
+=======
+>>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
 
 export const Room = () => {
   const { id } = useParams();
@@ -174,6 +177,13 @@ export const Room = () => {
                   borderColor: isSoundDetected ? "green" : "black",
                 }}>
 
+<<<<<<< HEAD
+=======
+                {/* {isCameraOn === false && (<div className="Avatar">
+                  <Avatar />
+                </div>)} */}
+
+>>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
                 <VideoPlayer
                   stream={stream}
                   userName={userName + " (You)"}
@@ -196,6 +206,12 @@ export const Room = () => {
                     borderColor: peer.isSpeaking ? "green" : "black",
                   }}
                 >
+<<<<<<< HEAD
+=======
+                  {/* {isCameraOn === false && (<div className="Avatar">
+                    <Avatar />
+                  </div>)} */}
+>>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
 
                   <VideoPlayer
                     stream={peer.stream}
@@ -271,7 +287,11 @@ export const Room = () => {
       <div className="row bottom-bar">
         <div className="col d-flex justify-content-center">
           <CopyToClipboard text={id || ""} onCopy={handleCopy}>
+<<<<<<< HEAD
             <Button className="Button">
+=======
+            <Button className="p-4 mx-2">
+>>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
               {copied ? `Đã Sao Chép` : `Room id ${id}`}
             </Button>
           </CopyToClipboard>

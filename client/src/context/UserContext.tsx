@@ -36,11 +36,19 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     const initial = userName.charAt(0).toUpperCase();
 
     return (
+<<<<<<< HEAD
       <CreateAvatar className=""
         name={initial}
         size="200"
         round={true}
         style={{ fontSize: "30px" }}
+=======
+      <CreateAvatar
+        name={initial}
+        size="400"
+        round={true}
+        style={{ fontSize: "60px" }}
+>>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
       />
     );
   };

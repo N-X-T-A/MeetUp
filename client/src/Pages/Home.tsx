@@ -6,8 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../components/common/Button";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
+<<<<<<< HEAD
 import { NameInput } from "../common/Name";
 import { HistoryButton } from "../components/HistoryButton";
+=======
+>>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
 
 export const Home = () => {
   const { userName } = useContext(UserContext);
@@ -64,10 +67,13 @@ export const Home = () => {
     setSubCap("Gặp Gỡ Nhau Mọi Lúc Mọi Nơi");
   };
 
+<<<<<<< HEAD
   const toggleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
   };
 
+=======
+>>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
   return (
     <div>
       <div className="nav">
@@ -139,17 +145,25 @@ export const Home = () => {
             Kết Nối Mọi Người Lại Với Nhau Bất Kỳ Nơi Đâu, Bất Kỳ Thời Điểm Nào
             Thông Qua <br /> MeetUp
           </h4>
+<<<<<<< HEAD
           <NameInput></NameInput>
           {!!userName ? (
             <Join></Join>
             
+=======
+          {!!userName ? (
+            <Join></Join>
+>>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
           ) : (
             <Button className="btn-Login mx-3" onClick={handleLogin}>
               {" "}
               Hãy Đăng Nhập Để Tham Gia Cuộc Họp{" "}
             </Button>
           )}
+<<<<<<< HEAD
           
+=======
+>>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
         </div>
         <div className="main-slider">
           <div className={`previous-slide btns ${isBackDisabled ? "disable" : ""}`} id="back" onClick={handleBackClick}>
