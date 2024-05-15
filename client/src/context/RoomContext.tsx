@@ -219,18 +219,23 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
   };
 
   const toggleCamera = () => {
-    setStream((prevStream) => {
-      // Đảm bảo stream đã được khởi tạo trước khi thực hiện thay đổi
-      if (!prevStream) return prevStream;
+    // setStream((prevStream) => {
+    //   // Đảm bảo stream đã được khởi tạo trước khi thực hiện thay đổi
+    //   if (!prevStream) return prevStream;
 
-      const videoTrack = prevStream.getVideoTracks()[0];
-      if (videoTrack) {
-        // Tắt/bật video track
-        videoTrack.enabled = !videoTrack.enabled;
-        setIsCameraOn(videoTrack.enabled);
-      }
-      return prevStream.clone();
-    });
+    //   const videoTrack = prevStream.getVideoTracks()[0];
+    //   if (videoTrack) {
+    //     // Tắt/bật video track
+    //     videoTrack.enabled = !videoTrack.enabled;
+    //     setIsCameraOn(videoTrack.enabled);
+    //   }
+    //   return prevStream.clone();
+    // });
+    const videoTrack = stream?.getVideoTracks()[0];
+    if (videoTrack) {
+      videoTrack.enabled = !videoTrack.enabled;
+      setIsCameraOn(videoTrack.enabled);
+    }
   };
 
   const toggleMicro = () => {
