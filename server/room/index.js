@@ -1,4 +1,6 @@
 const { v4: uuidV4 } = require("uuid");
+const mysql = require("mysql");
+require("dotenv").config();
 
 const rooms = {};
 const chats = {};
@@ -9,7 +11,16 @@ const generateRoomId = () => {
   return formattedId;
 };
 
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+
 let hostRoomID = "";
+let start_time;
+let end_time;
 
 const roomHandler = (socket) => {
   const createRoom = ({ peerId }) => {
@@ -17,6 +28,8 @@ const roomHandler = (socket) => {
     rooms[roomId] = {};
     socket.emit("room-created", { roomId });
     console.log(`user created the room: ${roomId}`);
+    start_time = new Date().toISOString().slice(0, 19).replace("T", " ");
+    console.log("Start meeting at " + start_time);
     for (const id in rooms) {
       if (rooms.hasOwnProperty(id)) {
         rooms[id] = {};
@@ -48,23 +61,47 @@ const roomHandler = (socket) => {
     });
 
     socket.on("disconnect", () => {
-      if (hostRoomID === peerId) {
-        console.log("host left the room", peerId);
-      } else {
-        console.log("user left the room", peerId);
-      }
       leaveRoom({ roomId, peerId });
     });
   };
 
   const leaveRoom = ({ peerId, roomId }) => {
     if (hostRoomID === peerId) {
-      console.log("host left the room", peerId);
-      // delete rooms[roomId];
+      //console.log("host left the room", peerId);
+      delete rooms[roomId];
       // socket.to(roomId).emit("room-deleted", { roomId, reason: "host-left" });
+      const roomEmpty = Object.keys(rooms).length === 0;
+      if (roomEmpty) {
+        end_time = new Date().toISOString().slice(0, 19).replace("T", " ");
+        console.log("End meeting at " + end_time);
+
+        pool.query(
+          `SELECT * FROM meetings WHERE roomid = ? AND start_time = ?`,
+          [roomId, start_time],
+          (error, results) => {
+            if (error) {
+              return;
+            }
+            if (results.length === 0) {
+              pool.query(
+                `INSERT INTO meetings (roomid, start_time, end_time) VALUES (?, ?, ?)`,
+                [roomId, start_time, end_time],
+                (error) => {
+                  if (error) {
+                    console.error("Error inserting meeting end time:", error);
+                  }
+                }
+              );
+            } else {
+              return;
+            }
+          }
+        );
+      }
     } else {
       console.log("user left the room", peerId);
     }
+    //delete rooms[roomId][peerId];
     socket.to(roomId).emit("user-disconnected", peerId);
   };
 
