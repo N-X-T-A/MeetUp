@@ -20,10 +20,7 @@ import { HandRaiseButton } from "../components/HandRaiseButton";
 import { Member } from "../components/MemberList";
 import { SettingButton } from "../components/SettingButton";
 import { UserListButton } from "../components/UserListButton";
-<<<<<<< HEAD
-import "../../src/css/Button.css"
-=======
->>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
+import "../../src/css/Button.css";
 
 export const Room = () => {
   const { id } = useParams();
@@ -64,7 +61,6 @@ export const Room = () => {
   const [showMember, setShowMember] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
     changeDevice: ((deviceId: string) => void) | undefined
@@ -163,7 +159,6 @@ export const Room = () => {
                   stream={screenSharingVideo}
                   isScreenSharing={true}
                 />
-                
               </div>
             </div>
           )}
@@ -175,15 +170,8 @@ export const Room = () => {
                 style={{
                   border: "5px solid",
                   borderColor: isSoundDetected ? "green" : "black",
-                }}>
-
-<<<<<<< HEAD
-=======
-                {/* {isCameraOn === false && (<div className="Avatar">
-                  <Avatar />
-                </div>)} */}
-
->>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
+                }}
+              >
                 <VideoPlayer
                   stream={stream}
                   userName={userName + " (You)"}
@@ -206,13 +194,6 @@ export const Room = () => {
                     borderColor: peer.isSpeaking ? "green" : "black",
                   }}
                 >
-<<<<<<< HEAD
-=======
-                  {/* {isCameraOn === false && (<div className="Avatar">
-                    <Avatar />
-                  </div>)} */}
->>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
-
                   <VideoPlayer
                     stream={peer.stream}
                     userName={peer.userName}
@@ -220,14 +201,10 @@ export const Room = () => {
                     isHandRaised={peer.isHandRaised}
                     isCameraOn={isCameraOn}
                   />
-                  
-
                 </div>
               ))}
           </div>
         </div>
-
-        
 
         {showChat && (
           <div className="col-md-3">
@@ -287,11 +264,7 @@ export const Room = () => {
       <div className="row bottom-bar">
         <div className="col d-flex justify-content-center">
           <CopyToClipboard text={id || ""} onCopy={handleCopy}>
-<<<<<<< HEAD
             <Button className="Button">
-=======
-            <Button className="p-4 mx-2">
->>>>>>> 6b7e2748937226dcc8c0bbe92cbb59c62092d720
               {copied ? `Đã Sao Chép` : `Room id ${id}`}
             </Button>
           </CopyToClipboard>
@@ -313,23 +286,25 @@ export const Room = () => {
       </div>
     </div>
   ) : (
-      <div className="center">
-        <div className="contaier">
-          <div className="camerasite">
-            <VideoPlayer stream={stream}  userName={userName}/>
-          </div>
-          <div className="btn-ready py-3">
-            <div className="row">
-              <div className="col-md-auto">
-                <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn}/>
-                <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
-              </div>
-              <div className="col col-lg-7">
-                <Button onClick={enterRoom} className="Button btn-join">Join</Button>
-              </div>
+    <div className="center">
+      <div className="contaier">
+        <div className="camerasite">
+          <VideoPlayer stream={stream} userName={userName} />
+        </div>
+        <div className="btn-ready py-3">
+          <div className="row">
+            <div className="col-md-auto">
+              <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn} />
+              <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
+            </div>
+            <div className="col col-lg-7">
+              <Button onClick={enterRoom} className="Button btn-join">
+                Join
+              </Button>
             </div>
           </div>
         </div>
       </div>
+    </div>
   );
 };
