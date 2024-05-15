@@ -23,7 +23,7 @@ body {
   font-size: 1rem;
   line-height: 0;
 }
-.time-date {
+.Left {
   position: absolute;
   right: 30px;
 }
@@ -221,5 +221,63 @@ a {
   {
     margin-left: 0;
   }
+}
+.dialog-overlay-home {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
 
+.dialog-home {
+  background-color: white;
+  border-radius: 8px;
+  position: relative;
+  width: 50%;
+  height: 50%;
+}
+
+.btn-dialogg {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+}
+
+.History-dialog {
+  height: 90%;
+  overflow-y: scroll;
+}
+
+.row{
+  --bs-gutter-x: 0;
+}
+
+.col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.history-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.line {
+  border-right: #e3e2e2 2px solid;
+    height: 23px;
 }

@@ -1,0 +1,13 @@
+.ChatTextList
+{
+    height: 81vh;
+    overflow-y: scroll ;
+}
+
+@media screen and (max-width: 1024px ) { 
+    .ChatTextList
+    {
+        height: 79vh;
+        overflow-y: scroll ;
+    }
+}

@@ -1,4 +1,4 @@
-import { NameInput } from "../common/Name";
+// import { NameInput } from "../common/Name";
 import { Button } from "./common/Button";
 import { IDInput } from "../common/IDRoom";
 import { ws } from "../ws";
@@ -38,12 +38,12 @@ export const Join: React.FC = () => {
   };
 
   return (
-    <div className=" flex flex-col">
-      <Button onClick={createRoom} className="py-2 px-8 text-xl">
-        Start new meeting
+    <div className="">
+      <Button onClick={createRoom} className="Button">
+        Tạo Cuộc Họp Mới
       </Button>
       <IDInput />
-      <Button onClick={joinRoom} className="py-2 px-8 text-xl">
+      <Button onClick={joinRoom} className="Button">
         Join Room
       </Button>
     </div>

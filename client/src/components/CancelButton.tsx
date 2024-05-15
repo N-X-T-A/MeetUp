@@ -1,16 +1,17 @@
 import { Button } from "./common/Button";
+import "../../src/css/Button.css"
 
 export const CancelButton: React.FC<{ onClick: () => void }> = ({
     onClick,
 }) => {
     return (
-        <Button className="p-4 mx-2" onClick={onClick}>
+        <Button className="Button" onClick={onClick}>
             <svg xmlns="http://www.w3.org/2000/svg" 
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke-width="1.5" 
                 stroke="currentColor" 
-                className="w-6 h-6">
+                className="Icon">
                 <path 
                     stroke-linecap="round" 
                     stroke-linejoin="round" 

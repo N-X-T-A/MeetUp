@@ -1,12 +1,13 @@
 import { Button } from "./common/Button";
+import "../../src/css/Button.css"
 
 export const SettingButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
     return (
-        <Button className="p-4 mx-2" onClick={onClick} testId="chat-button">
+        <Button className="Button" onClick={onClick} testId="chat-button">
             <svg xmlns="http://www.w3.org/2000/svg" 
                 fill="none" viewBox="0 0 24 24" 
                 strokeWidth={1.5} stroke="currentColor" 
-                className="w-6 h-6">
+                className="Icon">
                 <path 
                     strokeLinecap="round" 
                     strokeLinejoin="round" 

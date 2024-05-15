@@ -20,6 +20,7 @@ import { HandRaiseButton } from "../components/HandRaiseButton";
 import { Member } from "../components/MemberList";
 import { SettingButton } from "../components/SettingButton";
 import { UserListButton } from "../components/UserListButton";
+import "../../src/css/Button.css"
 
 export const Room = () => {
   const { id } = useParams();
@@ -173,10 +174,6 @@ export const Room = () => {
                   borderColor: isSoundDetected ? "green" : "black",
                 }}>
 
-                {/* {isCameraOn === false && (<div className="Avatar">
-                  <Avatar />
-                </div>)} */}
-
                 <VideoPlayer
                   stream={stream}
                   userName={userName + " (You)"}
@@ -199,9 +196,6 @@ export const Room = () => {
                     borderColor: peer.isSpeaking ? "green" : "black",
                   }}
                 >
-                  {/* {isCameraOn === false && (<div className="Avatar">
-                    <Avatar />
-                  </div>)} */}
 
                   <VideoPlayer
                     stream={peer.stream}
@@ -277,7 +271,7 @@ export const Room = () => {
       <div className="row bottom-bar">
         <div className="col d-flex justify-content-center">
           <CopyToClipboard text={id || ""} onCopy={handleCopy}>
-            <Button className="p-4 mx-2">
+            <Button className="Button">
               {copied ? `Đã Sao Chép` : `Room id ${id}`}
             </Button>
           </CopyToClipboard>
@@ -299,19 +293,23 @@ export const Room = () => {
       </div>
     </div>
   ) : (
-    <div>
-      <div style={{ width: "50%" }}>
-        <VideoPlayer stream={stream} userName={userName} />
+      <div className="center">
+        <div className="contaier">
+          <div className="camerasite">
+            <VideoPlayer stream={stream}  userName={userName}/>
+          </div>
+          <div className="btn-ready py-3">
+            <div className="row">
+              <div className="col-md-auto">
+                <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn}/>
+                <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
+              </div>
+              <div className="col col-lg-7">
+                <Button onClick={enterRoom} className="Button btn-join">Join</Button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="h-28 fixed bottom-0 p-6 w-full flex items-center justify-center border-t-2 bg-white">
-        <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn} />
-        <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
-      </div>
-      <div className="flex flex-col">
-        <Button onClick={enterRoom} className="py-2 px-8 text-xl">
-          Join
-        </Button>
-      </div>
-    </div>
   );
 };

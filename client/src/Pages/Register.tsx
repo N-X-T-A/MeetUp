@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useExternalIP } from "../common/ExternalIP";
 import { UserContext } from "../context/UserContext";
-import { Login } from "./Login";
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -11,7 +10,7 @@ export const Register: React.FC = () => {
   const [name, setName] = useState<string>("");
 
   const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false); // State để lưu trạng thái hiển thị mật khẩu
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const externalIP = useExternalIP();
 
   if (!!userName) {
