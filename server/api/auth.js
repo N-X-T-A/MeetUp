@@ -62,23 +62,22 @@ router.post("/login", async (req, res) => {
               req.body.password,
               user.password
             );
-
             if (validPassword) {
-              if (error) {
-                res.status(500).json({ message: error.message });
-              } else {
-                res.status(200).json({
-                  message: "Đăng nhập thành công",
-                  name: user.name,
-                  username: req.body.username,
-                });
-              }
+              res.status(200).json({
+                message: "Đăng nhập thành công",
+                name: user.name,
+                username: req.body.username,
+              });
             } else {
+              console.log(`query error---- ${error}`);
+
               res
                 .status(401)
                 .json({ message: "Sai tên đăng nhập hoặc mật khẩu" });
             }
           } else {
+            console.log(`query error---- ${error}`);
+
             res
               .status(401)
               .json({ message: "Sai tên đăng nhập hoặc mật khẩu" });

@@ -21,9 +21,12 @@ const pool = mysql.createPool({
 let hostRoomID = "";
 let start_time;
 let end_time;
+let creator_room;
+let user = [];
+let participantList;
 
 const roomHandler = (socket) => {
-  const createRoom = ({ peerId }) => {
+  const createRoom = ({ peerId, username }) => {
     const roomId = generateRoomId();
     rooms[roomId] = {};
     socket.emit("room-created", { roomId });
@@ -36,6 +39,7 @@ const roomHandler = (socket) => {
         console.log(`${id}`);
       }
     }
+    creator_room = username;
     hostRoomID = peerId;
   };
 
@@ -60,6 +64,10 @@ const roomHandler = (socket) => {
       participants: rooms[roomId],
     });
 
+    if (!user.includes(userName)) {
+      user.push(userName);
+    }
+
     socket.on("disconnect", () => {
       leaveRoom({ roomId, peerId });
     });
@@ -75,8 +83,10 @@ const roomHandler = (socket) => {
         end_time = new Date().toISOString().slice(0, 19).replace("T", " ");
         console.log("End meeting at " + end_time);
 
+        participantList = JSON.stringify(user);
+
         pool.query(
-          `SELECT * FROM meetings WHERE roomid = ? AND start_time = ?`,
+          `SELECT * FROM meetings WHERE room_id = ? AND start_time = ?`,
           [roomId, start_time],
           (error, results) => {
             if (error) {
@@ -84,11 +94,13 @@ const roomHandler = (socket) => {
             }
             if (results.length === 0) {
               pool.query(
-                `INSERT INTO meetings (roomid, start_time, end_time) VALUES (?, ?, ?)`,
-                [roomId, start_time, end_time],
+                `INSERT INTO meetings (room_id, creator_room, start_time, end_time, participant_list) VALUES (?, ?, ?, ?, ?)`,
+                [roomId, creator_room, start_time, end_time, participantList],
                 (error) => {
                   if (error) {
                     console.error("Error inserting meeting end time:", error);
+                  } else {
+                    user = [];
                   }
                 }
               );
