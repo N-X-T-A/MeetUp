@@ -98,11 +98,8 @@ io.on("connection", (socket) => {
   });
 });
 
-// Mount auth router
-app.use("/api/auth", authRouter);
-// app.listen(3000, () => {
-//   console.log(`running at 3000`);
-// });
+app.use("/api", authRouter);
+
 //listen on port for website
 server.listen(PORT);
 

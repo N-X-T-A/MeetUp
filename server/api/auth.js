@@ -62,24 +62,47 @@ router.post("/login", async (req, res) => {
               req.body.password,
               user.password
             );
-            if (validPassword) {
-              res
-                .status(200)
-                .json({ message: "Đăng nhập thành công", name: user.name });
-            } else {
-              console.log(`query error---- ${error}`);
 
+            if (validPassword) {
+              if (error) {
+                res.status(500).json({ message: error.message });
+              } else {
+                res.status(200).json({
+                  message: "Đăng nhập thành công",
+                  name: user.name,
+                  username: req.body.username,
+                });
+              }
+            } else {
               res
                 .status(401)
                 .json({ message: "Sai tên đăng nhập hoặc mật khẩu" });
             }
           } else {
-            console.log(`query error---- ${error}`);
-
             res
               .status(401)
               .json({ message: "Sai tên đăng nhập hoặc mật khẩu" });
           }
+        }
+      }
+    );
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post("/meetings", async (req, res) => {
+  try {
+    pool.query(
+      `SELECT * FROM meetings WHERE JSON_CONTAINS(participant_list, ?)`,
+      [`"${req.body.userName}"`],
+      (error, meetings) => {
+        if (error) {
+          res.status(500).json({ message: error.message });
+        } else {
+          res.status(200).json({
+            meetings: meetings,
+          });
         }
       }
     );
