@@ -7,7 +7,7 @@ import { UserContext } from "../context/UserContext";
 export const Login: React.FC = () => {
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
-  const { userName, setUserName } = useContext(UserContext); // Thêm userAvatar vào context
+  const { userName, setUserName, setUserLogin } = useContext(UserContext); // Thêm userAvatar vào context
 
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -32,7 +32,7 @@ export const Login: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setUserName(data.name);
-          //setUserAvatar(data.avatar);
+          setUserLogin(data.username);
           if (storedURL && storedURL !== "") {
             window.location.href = storedURL;
           } else {

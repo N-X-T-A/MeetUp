@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../components/common/Button";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
-import { NameInput } from "../common/Name";
 import { HistoryButton } from "../components/HistoryButton";
+import { useExternalIP } from "../common/ExternalIP";
 
 export const Home = () => {
-  const { userName } = useContext(UserContext);
+  const { userName, meetings, setMeetings } = useContext(UserContext);
   const [currentTime, setCurrentTime] = useState("");
   const [currentDate, setCurrentDate] = useState("");
   const [slideViewImage, setSlideViewImage] = useState(
@@ -22,7 +22,7 @@ export const Home = () => {
   const [subCap, setSubCap] = useState("Gặp Gỡ Nhau Mọi Lúc Mọi Nơi");
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const externalIP = useExternalIP();
   useEffect(() => {
     updateTime();
     const interval = setInterval(updateTime, 1000);
@@ -31,6 +31,27 @@ export const Home = () => {
 
   const handleLogin = () => {
     navigate("/Login");
+  };
+
+  const getMeetings = async () => {
+    try {
+      const response = await fetch(`${externalIP}` + "/api/meetings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userName }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMeetings(data.meetings);
+      } else {
+        console.log("Lỗi lấy dữ liệu");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const updateTime = () => {
@@ -71,6 +92,7 @@ export const Home = () => {
   };
 
   const toggleDialog = () => {
+    getMeetings();
     setIsDialogOpen(!isDialogOpen);
   };
 
@@ -102,14 +124,14 @@ export const Home = () => {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th scope="col" className="col-1">
+                      <th scope="col" className="">
                         Ngày-Giờ Bắt Đầu
                       </th>
                       <th scope="col" className="">
                         Mã Phòng
                       </th>
                       <th scope="col" className="">
-                        Số Người Tham Gia
+                        Người Tham Gia
                       </th>
                       <th scope="col" className="">
                         Kết Thúc
@@ -117,23 +139,24 @@ export const Home = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td colSpan={2}>Larry the Bird</td>
-                      <td>@twitter</td>
-                    </tr>
+                    {meetings.map((meeting) => {
+                      const participants = JSON.parse(meeting.participant_list);
+                      const participantCount = participants.length;
+
+                      return (
+                        <tr key={meeting.meeting_id}>
+                          <td>{meeting.start_time}</td>
+                          <td>{meeting.room_id}</td>
+                          <td>
+                            {/* {participants.join(", ")}
+                            <br />
+                            <strong>Số lượng:</strong>  */}
+                            {participantCount}
+                          </td>
+                          <td>{meeting.end_time}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
