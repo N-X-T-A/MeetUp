@@ -21,7 +21,7 @@ export const Login: React.FC = () => {
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       try {
-        const response = await fetch(`${externalIP}` + "/api/auth/login", {
+        const response = await fetch(`${externalIP}` + "/api/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

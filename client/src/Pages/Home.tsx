@@ -71,6 +71,17 @@ export const Home = () => {
     setCurrentDate(today);
   };
 
+  const formatDateTime = (isoString: string): string => {
+    const date = new Date(isoString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    return `${year}/${month}/${day} - ${hours}:${minutes}`;
+  };
+
   const handleNextClick = () => {
     setSlideViewImage(
       "https://www.gstatic.com/meet/user_edu_safety_light_e04a2bbb449524ef7e49ea36d5f25b65.svg"
@@ -145,7 +156,7 @@ export const Home = () => {
 
                       return (
                         <tr key={meeting.meeting_id}>
-                          <td>{meeting.start_time}</td>
+                          <td>{formatDateTime(meeting.start_time)}</td>
                           <td>{meeting.room_id}</td>
                           <td>
                             {/* {participants.join(", ")}
@@ -153,7 +164,7 @@ export const Home = () => {
                             <strong>Số lượng:</strong>  */}
                             {participantCount}
                           </td>
-                          <td>{meeting.end_time}</td>
+                          <td>{formatDateTime(meeting.end_time)}</td>
                         </tr>
                       );
                     })}

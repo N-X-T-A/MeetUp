@@ -1,6 +1,6 @@
 .peer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px , 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 10px;
   height: 90vh;
   overflow: hidden;
@@ -22,7 +22,7 @@
 
 .bottom-bar {
   position: fixed;
-  padding-top: .75rem;
+  padding-top: 0.75rem;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -33,7 +33,7 @@
 @media screen and (max-width: 1024px) {
   .peer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(330px , 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
     gap: 10px;
     height: 85vh;
     overflow: hidden;
@@ -49,8 +49,6 @@
     background-color: #fff;
   }
 }
-
-
 
 .dialog-overlay {
   position: fixed;
@@ -70,74 +68,70 @@
   border-radius: 8px;
 }
 
-.Mic-Input
-{
+.Mic-Input {
   width: 100%;
   border-style: solid;
   border-width: 1px;
   padding: 5px;
 }
 
-select#videoInput
-{
+select#videoInput {
   width: 100%;
   border-style: solid;
   border-width: 1px;
   padding: 5px;
 }
-.id-text
-{
+.id-text {
   text-align: center;
   align-items: center;
 }
 
 /* Ready */
-.center
-{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: url(https://64.media.tumblr.com/2b0ec5e7d4763b0cc6aaba6982be379c/tumblr_occujlvMQE1qze3hdo1_r2_500.gif) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    margin: 0;
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url(https://64.media.tumblr.com/2b0ec5e7d4763b0cc6aaba6982be379c/tumblr_occujlvMQE1qze3hdo1_r2_500.gif)
+    no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
 }
 
-    #profile-header{
-    background: url(https://cdn.discordapp.com/attachments/576382988615548953/869688243157876766/tumblr_occujlvMQE1qze3hdo1_r2_500.gif) no-repeat center center fixed !important;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    margin: 0; 
-  }
-  
-  #followers-count,#following-count{
-    display:none;
-  }
-
-.contaier
-{
-    width: 600px;
+#profile-header {
+  background: url(https://cdn.discordapp.com/attachments/576382988615548953/869688243157876766/tumblr_occujlvMQE1qze3hdo1_r2_500.gif)
+    no-repeat center center fixed !important;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  margin: 0;
 }
 
-.camerasite
-{
-    width: 600px;
-    background-color: black;
-    height: 450px;
+#followers-count,
+#following-count {
+  display: none;
 }
-.btn-ready
-{
-    width: 600px;
-    border: 1px solid black;
-    background-color: black;
+
+.contaier {
+  width: 600px;
+}
+
+.camerasite {
+  width: 600px;
+  background-color: black;
+  height: 450px;
+}
+.btn-ready {
+  width: 600px;
+  border: 1px solid black;
+  background-color: black;
 }

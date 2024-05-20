@@ -24,11 +24,9 @@
   display: inline-block;
 }
 
-.Avatar
-{
+.Avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateY(-570px);
-
+  transform: translateY(-525px);
 }

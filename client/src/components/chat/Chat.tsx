@@ -3,7 +3,7 @@ import { ChatContext } from "../../context/ChatContext";
 import { IMessage } from "../../types/chat";
 import { ChatBubble } from "./ChatBubble";
 import { ChatInput } from "./ChatInput";
-import "../../css/Chat.css"
+import "../../css/Chat.css";
 
 export const Chat: React.FC = () => {
   const { chat } = useContext(ChatContext);

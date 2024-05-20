@@ -10,11 +10,11 @@ import { UserContext } from "../context/UserContext";
 export const Join: React.FC = () => {
   const { roomId } = useContext(RoomContext);
   const navigate = useNavigate();
-  const { userId, userName } = useContext(UserContext);
+  const { userId, userName, userLogin } = useContext(UserContext);
 
   const createRoom = () => {
     if (userName) {
-      ws.emit("create-room", { peerId: userId });
+      ws.emit("create-room", { peerId: userId, username: userLogin });
     } else {
       alert("Bạn cần đăng nhập để tạo phòng");
       navigate(`/login`);

@@ -18,7 +18,7 @@ export const Register: React.FC = () => {
   } else {
     const handleRegister = async () => {
       try {
-        const response = await fetch(`${externalIP}` + "/api/auth/register", {
+        const response = await fetch(`${externalIP}` + "/api/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
