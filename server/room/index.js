@@ -146,6 +146,11 @@ const roomHandler = (socket) => {
   const toggleMic = ({ roomId, peerId, isMicOn }) => {
     socket.to(roomId).emit("mic-toggled", { peerId, isMicOn });
   };
+
+  const toggleCamera = ({ roomId, peerId, isCameraOn }) => {
+    socket.to(roomId).emit("camera-toggled", { peerId, isCameraOn });
+  };
+
   const toggleHandRaised = ({ roomId, peerId, isHandRaised }) => {
     socket.to(roomId).emit("handraised-toggled", { peerId, isHandRaised });
   };
@@ -161,6 +166,7 @@ const roomHandler = (socket) => {
   socket.on("change-name", changeName);
   socket.on("leave-room", leaveRoom);
   socket.on("toggle-mic", toggleMic);
+  socket.on("toggle-camera", toggleCamera);
   socket.on("toggle-handraised", toggleHandRaised);
   socket.on("check_isSpeaking", check_isSpeaking);
 };
