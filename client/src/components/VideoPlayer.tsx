@@ -1,6 +1,5 @@
 import { useEffect, useRef, useContext } from "react";
 
-
 import "../css/components/VideoPlayer.css";
 import { UserContext } from "../context/UserContext";
 interface VideoPlayerProps {
@@ -28,11 +27,15 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   }, [stream]);
 
-  const {Avatar} = useContext(UserContext)
+  const { Avatar } = useContext(UserContext);
 
   return (
     <>
-      <div className={`w-full h-full ${isScreenSharing ? "screen-sharing-video" : ""}`}>
+      <div
+        className={`w-full h-full ${
+          isScreenSharing ? "screen-sharing-video" : ""
+        }`}
+      >
         <video
           data-testid="peer-video"
           style={{ width: "100%" }}
@@ -41,9 +44,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
           muted={false}
         />
 
-        {isCameraOn === false && (<div className="Avatar">
-                  <Avatar />
-                </div>)}
+        {isCameraOn === false && (
+          <div className="Avatar">
+            <Avatar name={userName || ""} size="200" fontSize="30px" />
+          </div>
+        )}
 
         <div className="user">
           <p className="userName">

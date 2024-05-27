@@ -66,6 +66,8 @@
   background-color: white;
   padding: 50px;
   border-radius: 8px;
+  width: 800px;
+  height: 500px;
 }
 
 .Mic-Input {
@@ -134,4 +136,11 @@ select#videoInput {
   width: 600px;
   border: 1px solid black;
   background-color: black;
+}
+
+.col-md-3 {
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -7,7 +7,7 @@ import { UserContext } from "../context/UserContext";
 export const Login: React.FC = () => {
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
-  const { userName, setUserName, setUserLogin } = useContext(UserContext); // Thêm userAvatar vào context
+  const { userName, setUserName, setUserLogin } = useContext(UserContext);
 
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);

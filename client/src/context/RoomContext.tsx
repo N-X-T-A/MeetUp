@@ -27,9 +27,7 @@ interface RoomValue {
   screenStream?: MediaStream;
   peers: PeerState;
   shareScreen: () => void;
-  isCameraOn: boolean;
   toggleCamera: () => void;
-  isMicOn: boolean;
   toggleMicro: () => void;
   roomId: string;
   setRoomId: (id: string) => void;
@@ -52,9 +50,7 @@ interface RoomValue {
 export const RoomContext = createContext<RoomValue>({
   peers: {},
   shareScreen: () => {},
-  isCameraOn: true,
   toggleCamera: () => {},
-  isMicOn: true,
   toggleMicro: () => {},
   setRoomId: (id) => {},
   screenSharingId: "",
@@ -77,15 +73,14 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
   children,
 }) => {
   const navigate = useNavigate();
-  const { userName, userId } = useContext(UserContext);
+  const { userName, userId, setIsMicOn, setIsCameraOn } =
+    useContext(UserContext);
   const [me, setMe] = useState<Peer>();
   const [stream, setStream] = useState<MediaStream>();
   const [screenStream, setScreenStream] = useState<MediaStream>();
   const [peers, dispatch] = useReducer(peersReducer, {});
   const [screenSharingId, setScreenSharingId] = useState<string>("");
   const [roomId, setRoomId] = useState<string>("");
-  const [isCameraOn, setIsCameraOn] = useState(true);
-  const [isMicOn, setIsMicOn] = useState(true);
   const [isHandRaised, setisHandRaised] = useState(false);
   const [audioInputDevices, setAudioInputDevices] = useState<
     MediaDeviceInfo[] | null
@@ -235,6 +230,11 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
     if (videoTrack) {
       videoTrack.enabled = !videoTrack.enabled;
       setIsCameraOn(videoTrack.enabled);
+      ws.emit("toggle-camera", {
+        roomId,
+        peerId: userId,
+        isCameraOn: videoTrack.enabled,
+      });
     }
   };
 
@@ -457,6 +457,16 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
   }, []);
 
   useEffect(() => {
+    ws.on("camera-toggled", ({ peerId, isCameraOn }) => {
+      dispatch({ type: "TOGGLE_CAMERA", payload: { peerId, isCameraOn } });
+    });
+
+    return () => {
+      ws.off("camera-toggled");
+    };
+  }, []);
+
+  useEffect(() => {
     ws.on("handraised-toggled", ({ peerId, isHandRaised }) => {
       dispatch({ type: "HAND_RAISED", payload: { peerId, isHandRaised } });
     });
@@ -530,9 +540,7 @@ export const RoomProvider: React.FunctionComponent<{ children: ReactNode }> = ({
         roomId,
         setRoomId,
         screenSharingId,
-        isCameraOn,
         toggleCamera,
-        isMicOn,
         toggleMicro,
         CancelCall,
         checkCamera,

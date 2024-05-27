@@ -194,8 +194,7 @@ a {
   text-decoration: none;
 }
 @media screen and (max-width: 768px) {
-  .main-slider
-  {
+  .main-slider {
     display: none;
   }
 
@@ -209,16 +208,14 @@ a {
     margin-left: 0;
   }
 
-  #Date{
+  #Date {
     font-size: 10px;
   }
 
-  #time
-  {
+  #time {
     font-size: 10px;
   }
-  .h4
-  {
+  .h4 {
     margin-left: 0;
   }
 }
@@ -237,25 +234,29 @@ a {
 
 .dialog-home {
   background-color: white;
-  border-radius: 8px;
+  border-radius: 22px;
   position: relative;
   width: 50%;
   height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-dialogg {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  top: 0;
+  right: 10px;
   margin: 10px;
 }
 
 .History-dialog {
-  height: 90%;
+  width: 90%;
+  height: 85%;
   overflow-y: scroll;
 }
 
-.row{
+.row {
   --bs-gutter-x: 0;
 }
 
@@ -279,5 +280,11 @@ a {
 
 .line {
   border-right: #e3e2e2 2px solid;
-    height: 23px;
+  height: 23px;
+}
+
+.heading-table {
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }

@@ -14,11 +14,23 @@ interface UserValue {
   userId: string;
   userName: string;
   setUserName: (userName: string) => void;
-  Avatar: React.FC;
+  Avatar: React.FC<AvatarProps>;
   userLogin: string;
   setUserLogin: (userName: string) => void;
   meetings: Meeting[];
   setMeetings: (meetings: Meeting[]) => void;
+  isCameraOn: boolean;
+  isMicOn: boolean;
+  setIsCameraOn: (isCameraOn: boolean) => void;
+  setIsMicOn: (isCameraOn: boolean) => void;
+  role: boolean;
+  setRole: (role: boolean) => void;
+}
+
+interface AvatarProps {
+  name: string;
+  size?: string;
+  fontSize?: string;
 }
 
 export const UserContext = createContext<UserValue>({
@@ -30,6 +42,12 @@ export const UserContext = createContext<UserValue>({
   setUserLogin: () => {},
   meetings: [],
   setMeetings: () => {},
+  isCameraOn: true,
+  setIsCameraOn: () => {},
+  isMicOn: true,
+  setIsMicOn: () => {},
+  role: false,
+  setRole: () => {},
 });
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({
@@ -43,6 +61,10 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.getItem("userLogin") || ""
   );
   const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [isCameraOn, setIsCameraOn] = useState(true);
+  const [isMicOn, setIsMicOn] = useState(true);
+  const [role, setRole] = useState(false);
+
   useEffect(() => {
     localStorage.setItem("userName", userName);
   }, [userName]);
@@ -55,15 +77,15 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.setItem("userId", userId);
   }, [userId]);
 
-  const Avatar: React.FC = () => {
-    const initial = userName.charAt(0).toUpperCase();
+  const Avatar: React.FC<AvatarProps> = ({ name, size, fontSize }) => {
+    const initial = name.charAt(0).toUpperCase();
     return (
       <CreateAvatar
         className=""
         name={initial}
-        size="200"
+        size={size}
         round={true}
-        style={{ fontSize: "30px" }}
+        style={{ fontSize }}
       />
     );
   };
@@ -79,6 +101,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
         setUserLogin,
         meetings,
         setMeetings,
+        isCameraOn,
+        isMicOn,
+        setIsCameraOn,
+        setIsMicOn,
+        role,
+        setRole,
       }}
     >
       {children}

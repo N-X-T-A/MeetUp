@@ -133,19 +133,19 @@ export const Home = () => {
             <div className="dialog-home">
               <div className="History-dialog">
                 <table className="table">
-                  <thead>
+                  <thead className="heading-table">
                     <tr>
                       <th scope="col" className="">
-                        Ngày-Giờ Bắt Đầu
+                        Thời Gian Bắt Đầu
                       </th>
                       <th scope="col" className="">
                         Mã Phòng
                       </th>
                       <th scope="col" className="">
-                        Người Tham Gia
+                        Số Người Tham Gia
                       </th>
                       <th scope="col" className="">
-                        Kết Thúc
+                        Thời Gian Kết Thúc
                       </th>
                     </tr>
                   </thead>
@@ -172,7 +172,7 @@ export const Home = () => {
                 </table>
               </div>
               <button className="btn-dialogg" onClick={toggleDialog}>
-                Đóng
+                X
               </button>
             </div>
           </div>

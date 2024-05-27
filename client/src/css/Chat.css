@@ -9,3 +9,16 @@
     overflow-y: scroll;
   }
 }
+
+.sidebar {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  height: 90%;
+  width: 90%;
+}
+.word_wrap {
+  max-width: 200px;
+  word-wrap: break-word;
+}
