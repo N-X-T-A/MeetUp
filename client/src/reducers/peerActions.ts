@@ -25,6 +25,9 @@ export const addAllPeersAction = (peers: Record<string, IPeer>) => {
       ...peers[peerId],
       isHandRaised: false,
       isSpeaking: false,
+      isMicOn: true,
+      isCameraOn: true,
+      role: false,
     };
   }
   return {
@@ -54,4 +57,9 @@ export const toggleHandRaiseAction = (
 export const toggleAddPeerSpeaking = (peerId: string, isSpeaking: boolean) => ({
   type: "SPEAKING" as const,
   payload: { peerId, isSpeaking },
+});
+
+export const addPeerRole = (peerId: string, role: boolean) => ({
+  type: "ROLE" as const,
+  payload: { peerId, role },
 });

@@ -13,8 +13,10 @@ export type PeerState = Record<
     userName?: string;
     peerId: string;
     isMicOn?: boolean;
+    isCameraOn?: boolean;
     isHandRaised?: boolean;
     isSpeaking?: boolean;
+    role?: boolean;
   }
 >;
 
@@ -52,6 +54,10 @@ type PeerAction =
   | {
       type: "SPEAKING";
       payload: { peerId: string; isSpeaking: boolean };
+    }
+  | {
+      type: "ROLE";
+      payload: { peerId: string; role: boolean };
     };
 
 export const peersReducer = (
@@ -93,6 +99,14 @@ export const peersReducer = (
           isMicOn: action.payload.isMicOn,
         },
       };
+    case "TOGGLE_CAMERA":
+      return {
+        ...state,
+        [action.payload.peerId]: {
+          ...state[action.payload.peerId],
+          isCameraOn: action.payload.isCameraOn,
+        },
+      };
     case "HAND_RAISED":
       return {
         ...state,
@@ -107,6 +121,14 @@ export const peersReducer = (
         [action.payload.peerId]: {
           ...state[action.payload.peerId],
           isSpeaking: action.payload.isSpeaking,
+        },
+      };
+    case "ROLE":
+      return {
+        ...state,
+        [action.payload.peerId]: {
+          ...state[action.payload.peerId],
+          role: action.payload.role,
         },
       };
     default:

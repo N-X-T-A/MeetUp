@@ -3,4 +3,7 @@ export interface IPeer {
   peerId: string;
   isHandRaised?: boolean;
   isSpeaking?: boolean;
+  isMicOn?: boolean;
+  isCameraOn?: boolean;
+  role?: boolean;
 }
