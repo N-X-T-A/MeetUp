@@ -20,7 +20,7 @@ export const ChatInput: React.FC = () => {
           setMessage("");
         }}
       >
-        <div className="flex ">
+        <div className="flex p-2">
           <input
             className="border rounded"
             type="text"

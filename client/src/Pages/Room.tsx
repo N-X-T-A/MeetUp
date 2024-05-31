@@ -21,6 +21,11 @@ import { UserListButton } from "../components/UserListButton";
 import "../../src/css/Button.css";
 import { Settings } from "../components/Settings";
 import { Participants } from "../components/Participants";
+import { Background } from "../components/Background";
+import { Popup } from "../components/Popup";
+
+
+
 
 export const Room = () => {
   const { id } = useParams();
@@ -37,8 +42,15 @@ export const Room = () => {
     HandRaise,
     isHandRaised,
     isSoundDetected,
+    audioInputDevices,
+    changeAudioInputDevice,
+    audioOutputDevices,
+    changeAudioOutputDevice,
+    videoInputDevices,
+    changeVideoInputDevice,
+    loadSelectedVideoDevice,
   } = useContext(RoomContext);
-  const { userName, userId, isMicOn, isCameraOn } = useContext(UserContext);
+  const { userName, userId, isMicOn, isCameraOn, Avatar } = useContext(UserContext);
   const navigate = useNavigate();
   const divRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -47,6 +59,27 @@ export const Room = () => {
   const [showMember, setShowMember] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(
+    loadSelectedVideoDevice()
+  );
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    changeDevice: ((deviceId: string) => void) | undefined
+  ) => {
+    const deviceId = event.target.value;
+    setSelectedDeviceId(deviceId);
+    if (changeDevice) {
+      changeDevice(deviceId);
+    } else {
+      console.error("Change device function is undefined!");
+    }
+  };
+
+
+
   useEffect(() => {
     if (!userName) {
       alert("Bạn cần đăng nhập để tham gia phòng");
@@ -67,8 +100,33 @@ export const Room = () => {
   }, [id, setRoomId]);
 
   useEffect(() => {
+    setSelectedDeviceId(loadSelectedVideoDevice());
+  }, [videoInputDevices]);
+
+  useEffect(() => {
     setIsSidebarCollapsed(true);
   }, []);
+
+  useEffect(() => {
+    setIsSidebarCollapsed(true);
+  }, []);
+
+  useEffect(() => {
+    const handleUserJoined = (data: { userName: string }) => {
+      setPopupMessage(`${data.userName} đã tham gia phòng`);
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+      }, 100000);
+    };
+
+    ws.on("user-joined", handleUserJoined);
+
+    return () => {
+      ws.off("user-joined", handleUserJoined);
+    };
+  }, []);
+
 
   const screenSharingVideo =
     screenSharingId === userId ? screenStream : peers[screenSharingId]?.stream;
@@ -110,10 +168,16 @@ export const Room = () => {
 
   return isReady ? (
     <div className="Main">
+      {showPopup && <Popup message={popupMessage} onClose={() => setShowPopup(false)} />} 
       <div className="row">
         <div className={`col-md-${isSidebarCollapsed ? "12" : "9"}`}>
-          {screenSharingVideo && (
-            <div className="w-4/5 pr-4">
+          <div
+            className={`${
+              screenSharingVideo ? "container-str" : "peer-grid"
+            }`}
+          >
+            {screenSharingVideo && (
+            <div className="stream-area">
               <div className="relative h-full">
                 <VideoPlayer
                   stream={screenSharingVideo}
@@ -122,17 +186,11 @@ export const Room = () => {
               </div>
             </div>
           )}
-          <div
-            className={`${
-              screenSharingVideo ? "w-1/5 grid-col-1" : "peer-grid"
-            }`}
-          >
             {screenSharingId !== userId && (
               <div
-                className={isSoundDetected ? "highlight" : ""}
+                className= {`info-area  ${isSoundDetected ? "highlight" : ""}`}
                 ref={divRef}
                 style={{
-                  border: "5px solid",
                   borderColor: isSoundDetected ? "green" : "black",
                 }}
               >
@@ -151,10 +209,10 @@ export const Room = () => {
               .map((peer) => (
                 <div
                   key={peer.peerId}
-                  className={peer.isSpeaking ? "highlight" : ""}
+                  className={`info-area  ${peer.isSpeaking ? "highlight" : ""}`}
                   ref={divRef}
                   style={{
-                    border: "5px solid",
+                    
                     borderColor: peer.isSpeaking ? "green" : "black",
                   }}
                 >
@@ -221,25 +279,100 @@ export const Room = () => {
       </div>
     </div>
   ) : (
-    <div className="center">
-      <div className="contaier">
-        <div className="camerasite">
-          <VideoPlayer stream={stream} userName={userName} />
+    <div className="Ready">
+    <Background></Background>
+    <div className="Container">
+      <div className="row">
+        <div className="col Left-Container">
+          <div className="">
+          <div className="Camerasite">
+            <VideoPlayer stream={stream} userName={userName}/>
+          </div>
+          <div className="btn-ready py-3">
+            <div className="row">
+              <div className="col">
+                <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn} />
+                <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
+              </div>
+            </div> 
+          </div>
+          </div>
         </div>
-        <div className="btn-ready py-3">
-          <div className="row">
-            <div className="col-md-auto">
-              <CameraButton onClick={toggleCamera} isCameraOn={isCameraOn} />
-              <MicButton onClick={toggleMicro} isMicOn={isMicOn} />
-            </div>
-            <div className="col col-lg-7">
-              <Button onClick={enterRoom} className="Button btn-join">
-                Join
-              </Button>
-            </div>
+        <div className="col">
+          <div className="Right-Container">
+            Những người trong phòng
+            {Object.values(peersToShow as PeerState)
+              .filter((peer) => !!peer.stream)
+              .map((peer) => (
+                <Avatar name={peer.userName || ""} size="50" fontSize="10px" />
+              ))}
+            
+            <Button onClick={enterRoom} className="Button btn-join">
+              Tham Gia
+            </Button>
           </div>
         </div>
       </div>
+      {/*  */}
+      <div className="option-input">
+        <div className="row">
+          <div className="col">
+            <div className="section">
+                <label className="label">🎤</label>
+                <select
+                  className="select"
+                  id="audioInput"
+                  onChange={(e) => handleChange(e, changeAudioInputDevice)}
+                >
+                  {audioInputDevices &&
+                    audioInputDevices.map((device) => (
+                      <option key={device.deviceId} value={device.deviceId}>
+                        {device.label}
+                      </option>
+                    ))}
+                </select>
+              </div>
+          </div>
+
+          <div className="col">
+            <div className="section">
+                <label className="label">Loa</label>
+                <select
+                  className="select"
+                  id="audioOutput"
+                  onChange={(e) => handleChange(e, changeAudioOutputDevice)}
+                >
+                  {audioOutputDevices &&
+                    audioOutputDevices.map((device) => (
+                      <option key={device.deviceId} value={device.deviceId}>
+                        {device.label}
+                      </option>
+                    ))}
+                </select>
+              </div>
+          </div>
+
+          <div className="col">
+            <div className="section">
+                <label className="label">Camera</label>
+                <select
+                  className="select"
+                  id="videoInput"
+                  value={selectedDeviceId || ""}
+                  onChange={(e) => handleChange(e, changeVideoInputDevice)}
+                >
+                  {videoInputDevices &&
+                    videoInputDevices.map((device) => (
+                      <option key={device.deviceId} value={device.deviceId}>
+                        {device.label}
+                      </option>
+                    ))}
+                </select>
+              </div>
+          </div>
+        </div>
     </div>
+  </div>
+</div>
   );
 };

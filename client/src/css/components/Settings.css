@@ -160,3 +160,8 @@ input:checked + .slider:before {
 .call-controls a:hover {
   text-decoration: underline;
 }
+
+.option-input
+{
+  width: 52%;
+}

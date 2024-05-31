@@ -30,3 +30,7 @@
   justify-content: center;
   transform: translateY(-525px);
 }
+
+.w-full.h-full.screen-sharing-video {
+  display: flex;
+}
